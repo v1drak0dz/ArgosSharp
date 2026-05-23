@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="UseCase\" />
+    <PackageReference Include="AngleSharp" Version="1.4.0" />
+    <PackageReference Include="AngleSharp.XPath" Version="2.0.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.4.0" />
+    <ProjectReference Include="..\ArgosSharp.Domain\ArgosSharp.Domain.csproj" />
   </ItemGroup>
 
 </Project>
