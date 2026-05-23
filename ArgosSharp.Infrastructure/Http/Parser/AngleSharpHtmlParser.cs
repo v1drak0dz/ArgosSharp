@@ -3,8 +3,10 @@ using ArgoSharp = ArgosSharp.Application.Interfaces.Parser;
 
 namespace ArgosSharp.Infrastructure.Http.Parser
 {
-    public class AngleSharpHtmlParser(HtmlParser htmlParser) : ArgoSharp.IHtmlParser
+    public class AngleSharpHtmlParser : ArgoSharp.IHtmlParser
     {
+        private readonly HtmlParser htmlParser = new();
+
         public string? QueryText(string html, string selector)
         {
             var document = htmlParser.ParseDocument(html);

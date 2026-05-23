@@ -6,7 +6,7 @@ namespace ArgosSharp.Application.UseCase.Scraper
 {
     public class ScraperProcessor(IScraperStrategyContext scraperStrategyContext) : IScraperProcessor
     {
-        public async Task<List<Noticia>> GetNoticiasNoticias(string searchTerm, int depth, IEnumerable<ScraperSourceEnum> scraperSources)
+        public async Task<List<Noticia>> GetNoticias(string searchTerm, int depth, IEnumerable<ScraperSourceEnum> scraperSources)
         {
             if (string.IsNullOrEmpty(searchTerm))
                 throw new ArgumentNullException();

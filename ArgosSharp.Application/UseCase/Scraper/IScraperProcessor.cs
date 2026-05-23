@@ -5,6 +5,6 @@ namespace ArgosSharp.Application.UseCase.Scraper
 {
     public interface IScraperProcessor
     {
-        Task<List<Noticia>> GetNoticiasNoticias(string searchTerm, int depth, IEnumerable<ScraperSourceEnum> scraperSources);
+        Task<List<Noticia>> GetNoticias(string searchTerm, int depth, IEnumerable<ScraperSourceEnum> scraperSources);
     }
 }

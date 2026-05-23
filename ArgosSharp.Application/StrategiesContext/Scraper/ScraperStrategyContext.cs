@@ -8,7 +8,7 @@ namespace ArgosSharp.Application.StrategiesContext.Scraper
 {
     public class ScraperStrategyContext : IScraperStrategyContext
     {
-        public static async Task<List<Noticia>> GetNoticiasBySourceAsync(ScraperSourceEnum scraperSource, string searchTerm, int depth)
+        public async Task<List<Noticia>> GetNoticiasBySourceAsync(ScraperSourceEnum scraperSource, string searchTerm, int depth)
         {
             var scrapers = Assembly.GetExecutingAssembly().GetTypes().Where(x => typeof(IScraperStrategy).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
             

@@ -9,16 +9,14 @@ namespace ArgosSharp.Application.Services.JobProcessor
 
         public async Task ProcessJobAsync(Job job)
         {
-
             try
             {
                 job.Status = JobStatusEnum.Processing;
 
-                IEnumerable<ScraperSourceEnum> sources = [
-                    ScraperSourceEnum.Caraguatatuba,
-                ];
+                var sources = job.Parameters.Sites.AsEnumerable();
+                var depth = job.Parameters.Depth;
 
-                var data = await scraperProcessor.GetNoticiasNoticias(job.SearchTerm, job.Depth, sources);
+                var data = await scraperProcessor.GetNoticias(job.SearchTerm, depth, sources);
 
                 job.Data = data;
 

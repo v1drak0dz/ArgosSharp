@@ -9,11 +9,12 @@ namespace ArgosSharp.Application.Services.JobStore
     {
         private readonly ConcurrentDictionary<Guid, Job> _jobs = new();
         private readonly SemaphoreSlim saveLock = new(1, 1);
+        private int currentJobId = 0;
 
         public async Task AddJobAsync(Job job)
         {
             _jobs[job.JobHash] = job;
-
+            job.JobId = Interlocked.Increment(ref currentJobId);
             await PersistAsync();
         }
 
@@ -38,6 +39,7 @@ namespace ArgosSharp.Application.Services.JobStore
         public async Task InitializeAsync()
         {
             var jobs = await persistenceService.LoadAsync();
+            currentJobId = jobs.Count > 0 ? jobs.Max(X => X.JobId) : 0;
 
             foreach (var job in jobs)
             {

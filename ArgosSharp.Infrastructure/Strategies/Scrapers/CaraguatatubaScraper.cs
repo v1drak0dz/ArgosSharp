@@ -42,7 +42,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
 
             foreach (var item in noticiasRaw)
             {
-                var rawDate = _parser.QueryText(item, "span[class*='created-at']::text()")
+                var rawDate = _parser.QueryText(item, "span[class*='created-at']::text()");
                 DateTime.TryParseExact(rawDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date);
                 noticias.Add(
                     new Noticia(

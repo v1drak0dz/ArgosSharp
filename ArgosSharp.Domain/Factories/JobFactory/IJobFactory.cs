@@ -4,6 +4,6 @@ namespace ArgosSharp.Domain.Factories.JobFactory
 {
     public interface IJobFactory
     {
-        Job Create(string searchTerm, Dictionary<string, object> parameters);
+        Job Create(string searchTerm, JobParameters parameters);
     }
 }

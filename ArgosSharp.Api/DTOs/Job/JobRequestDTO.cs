@@ -1,8 +1,10 @@
-﻿namespace ArgosSharp.Api.DTOs.Job
+﻿using ArgosSharp.Domain.ValueObjects;
+
+namespace ArgosSharp.Api.DTOs.Job
 {
     public class JobRequestDTO
     {
         public string searchTerm { get; set; }
-        public Dictionary<string, object> parameters { get; set; }
+        public JobParameters parameters { get; set; }
     }
 }
