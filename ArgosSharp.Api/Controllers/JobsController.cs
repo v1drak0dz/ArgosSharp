@@ -1,26 +1,28 @@
 ﻿using ArgosSharp.Api.DTOs.Job;
-using ArgosSharp.Application.UseCase.Scraper;
+using ArgosSharp.Application.Services.JobQueue;
 using ArgosSharp.Domain.Enums;
+using ArgosSharp.Domain.Factories.JobFactory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArgosSharp.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class JobsController(IScraperProcessor _scraperProcessor) : ControllerBase
+    public class JobsController(IJobQueue jobQueue, IJobFactory jobFactory) : ControllerBase
     {
         [HttpPost]
-        public async void CreateJobAsync([FromBody] JobRequestDTO dto)
+        public async Task<ActionResult<JobResponseDTO>> CreateJobAsync([FromBody] JobRequestDTO dto)
         {
             try
             {
-                // CREATE JOB
-                // _ = Task.Run(async () => { await _jobProcessorService.ProcessJobAsync(job);
-                // Estudar implementacao de BackgroundService + Queue
+                var job = jobFactory.Create(dto.searchTerm, dto.parameters);
+                await jobQueue.EnqueueAsync(job);
+                return Ok(new JobResponseDTO(JobStatusEnum.Created, Guid.NewGuid().ToString(), 1, []));
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                return NotFound();
             }
         }
     }

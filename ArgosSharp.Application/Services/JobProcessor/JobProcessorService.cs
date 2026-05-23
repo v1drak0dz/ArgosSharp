@@ -6,15 +6,13 @@ namespace ArgosSharp.Application.Services.JobProcessor
 {
     public class JobProcessorService(IScraperProcessor scraperProcessor) : IJobProcessorService
     {
-        private static readonly SemaphoreSlim semaphoreSlim = new(2);
 
         public async Task ProcessJobAsync(Job job)
         {
-            await semaphoreSlim.WaitAsync();
 
             try
             {
-                job.Status = JobStatusEnum.Created;
+                job.Status = JobStatusEnum.Processing;
 
                 IEnumerable<ScraperSourceEnum> sources = [
                     ScraperSourceEnum.Caraguatatuba,
@@ -30,10 +28,6 @@ namespace ArgosSharp.Application.Services.JobProcessor
             {
                 job.Status = JobStatusEnum.Failed;
                 job.Error = ex.Message;
-            }
-            finally
-            {
-                semaphoreSlim.Release();
             }
         }
     }
