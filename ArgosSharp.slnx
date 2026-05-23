@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Tests/" />
+  <Project Path="ArgosSharp.Api/ArgosSharp.Api.csproj" Id="36123773-cfd1-4a70-8683-4123f207be65" />
+  <Project Path="ArgosSharp.Application/ArgosSharp.Application.csproj" Id="929e3cc7-7f78-4500-a4b6-be109479b4a5" />
+  <Project Path="ArgosSharp.Domain/ArgosSharp.Domain.csproj" Id="00cbd3a1-3a3d-4878-82ac-20723cf45195" />
+  <Project Path="ArgosSharp.Infrastructure/ArgosSharp.Infrastructure.csproj" Id="c370c4f6-4dee-4220-860e-f32f309e2717" />
+</Solution>

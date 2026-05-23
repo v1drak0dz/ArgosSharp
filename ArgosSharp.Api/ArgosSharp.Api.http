@@ -1,0 +1,6 @@
+@ArgosSharp.Api_HostAddress = http://localhost:5048
+
+GET {{ArgosSharp.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
