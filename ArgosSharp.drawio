@@ -1,0 +1,178 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Página-1" id="-UCSM0tQj1OXay4SQZ_H">
+    <mxGraphModel dx="3639" dy="2753" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-10" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zCcy6xFwLQtw2dmvwSz7-9" value="Envia DTO">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="-100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-23" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zCcy6xFwLQtw2dmvwSz7-22" value="Enfileira Job">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-21" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-7" value="Recebe Job">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="-60" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-9" parent="1" style="whiteSpace=wrap;html=1;" value="JobFromRequest()" vertex="1">
+          <mxGeometry height="60" width="120" x="680" y="-110" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-24" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="JobController" vertex="1">
+          <mxGeometry height="320" width="300" x="210" y="-170" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-7" parent="zCcy6xFwLQtw2dmvwSz7-24" style="whiteSpace=wrap;html=1;" value="CreateJobAsync()" vertex="1">
+          <mxGeometry height="60" width="120" x="30" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-26" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="JobMapper" vertex="1">
+          <mxGeometry height="240" width="300" x="560" y="-210" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-27" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="JobQueue" vertex="1">
+          <mxGeometry height="230" width="220" x="560" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-39" parent="zCcy6xFwLQtw2dmvwSz7-27" style="whiteSpace=wrap;html=1;rounded=0;" value="DequeueAsync()" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-22" parent="zCcy6xFwLQtw2dmvwSz7-27" style="whiteSpace=wrap;html=1;" value="EnqueueAsync()" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-57" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-7" value="Envia SearchTerm e Params">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="30" y="25" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-30" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Request" vertex="1">
+          <mxGeometry height="60" width="120" x="-30" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-33" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-35" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-34" value="Worker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-61" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zCcy6xFwLQtw2dmvwSz7-60" value="Carrega Historico de Job">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-260" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-32" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Startup" vertex="1">
+          <mxGeometry height="80" width="120" x="-320" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-38" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="JobWorker" vertex="1">
+          <mxGeometry height="170" width="220" x="210" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-34" parent="zCcy6xFwLQtw2dmvwSz7-38" style="rounded=0;whiteSpace=wrap;html=1;" value="ExecuteAsync()" vertex="1">
+          <mxGeometry height="60" width="120" x="70" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-40" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zCcy6xFwLQtw2dmvwSz7-39" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-43" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="JobProcessor" vertex="1">
+          <mxGeometry height="170" width="180" x="530" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-41" parent="zCcy6xFwLQtw2dmvwSz7-43" style="whiteSpace=wrap;html=1;rounded=0;" value="ProcessJobAsync()" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-45" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-41" value="Passa JobData">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-49" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zCcy6xFwLQtw2dmvwSz7-48" value="Pede data por strategy">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1080" y="510" />
+              <mxPoint x="1080" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-66" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-41" value="Retorna data">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="540" />
+              <mxPoint x="800" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-46" parent="1" style="whiteSpace=wrap;html=1;rounded=0;" value="GetNoticias()" vertex="1">
+          <mxGeometry height="60" width="120" x="840" y="495" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-47" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zCcy6xFwLQtw2dmvwSz7-46" value="Chama Scraper">
+          <mxGeometry relative="1" x="0.0039" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="760" y="510" />
+              <mxPoint x="760" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-50" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="ScraperProcessor" vertex="1">
+          <mxGeometry height="170" width="170" x="810" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-51" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="ScraperStrategy" vertex="1">
+          <mxGeometry height="220" width="240" x="1170" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-48" parent="zCcy6xFwLQtw2dmvwSz7-51" style="whiteSpace=wrap;html=1;rounded=0;" value="GetNoticiasBySourceAsync()" vertex="1">
+          <mxGeometry height="60" width="190" x="25" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-52" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-34" value="Tira Job da fila">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-53" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="zCcy6xFwLQtw2dmvwSz7-46" value="Retorna data">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1080" y="540" />
+              <mxPoint x="1080" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-59" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-30" value="Retorna Ok">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-62" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="InMemoryJobStore" vertex="1">
+          <mxGeometry height="450" width="440" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-60" parent="zCcy6xFwLQtw2dmvwSz7-62" style="whiteSpace=wrap;html=1;" value="InitializeAsync()" vertex="1">
+          <mxGeometry height="60" width="120" x="170" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-63" parent="zCcy6xFwLQtw2dmvwSz7-62" style="rounded=0;whiteSpace=wrap;html=1;" value="UpdateAsync()" vertex="1">
+          <mxGeometry height="60" width="120" x="170" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-65" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-63" value="Chamada 2: Atualiza para Completed e data">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="670" y="795" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zCcy6xFwLQtw2dmvwSz7-68" edge="1" parent="1" source="zCcy6xFwLQtw2dmvwSz7-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" target="zCcy6xFwLQtw2dmvwSz7-63" value="Chamada 1: Atualiza para Processing">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="765" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
