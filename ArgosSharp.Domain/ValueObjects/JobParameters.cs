@@ -2,9 +2,9 @@
 
 namespace ArgosSharp.Domain.ValueObjects
 {
-    public class JobParameters
+    public class JobParameters(List<ScraperSourceEnum> sites, int depth)
     {
-        public List<ScraperSourceEnum> Sites { get; set; } = [];
-        public int Depth { get; set; } = -1;
+        public List<ScraperSourceEnum> Sites { get; set; } = sites;
+        public int Depth { get; set; } = depth;
     }
 }

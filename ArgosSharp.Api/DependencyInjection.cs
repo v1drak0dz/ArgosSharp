@@ -1,7 +1,6 @@
 ﻿using ArgosSharp.Application.Interfaces.Fetcher;
 using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Application.Interfaces.Strategies;
-using ArgosSharp.Application.Services.JobProcessor;
 using ArgosSharp.Application.Services.JobQueue;
 using ArgosSharp.Application.Services.JobStore;
 using ArgosSharp.Application.Services.JobWorker;

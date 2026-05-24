@@ -1,21 +1,22 @@
 ﻿using ArgosSharp.Api.DTOs.Job;
 using ArgosSharp.Application.Services.JobQueue;
 using ArgosSharp.Domain.Enums;
-using ArgosSharp.Domain.Factories.JobFactory;
 using Microsoft.AspNetCore.Mvc;
+using ArgosSharp.Api.DTOs.Job.CreateJob;
+using ArgosSharp.Api.Mappers.JobMapper;
 
 namespace ArgosSharp.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class JobsController(IJobQueue jobQueue, IJobFactory jobFactory) : ControllerBase
+    public class JobsController(IJobQueue jobQueue, IJobMapper jobMapper) : ControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<JobResponseDTO>> CreateJobAsync([FromBody] JobRequestDTO dto)
+        public async Task<ActionResult<JobResponseDTO>> CreateJobAsync([FromBody] CreateJobRequest createJobDto)
         {
             try
             {
-                var job = jobFactory.Create(dto.searchTerm, dto.parameters);
+                var job = jobMapper.JobFromRequest(createJobDto);
                 await jobQueue.EnqueueAsync(job);
                 return Ok(new JobResponseDTO(JobStatusEnum.Created, Guid.NewGuid().ToString(), 1, []));
             }
