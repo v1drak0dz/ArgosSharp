@@ -1,5 +1,9 @@
 <Solution>
   <Folder Name="/Tests/" />
+  <Folder Name="/Tests/UnitTests/">
+    <Project Path="ArgosSharp.Application.UnitTests/ArgosSharp.Application.UnitTests.csproj" Id="52ed77e6-0e27-4cd4-81f1-9c54d65ad797" />
+    <Project Path="ArgosSharp.Infrastructure.UnitTests/ArgosSharp.Infrastructure.UnitTests.csproj" Id="6a395520-6747-4f4f-a237-df435d23980e" />
+  </Folder>
   <Project Path="ArgosSharp.Api/ArgosSharp.Api.csproj" Id="36123773-cfd1-4a70-8683-4123f207be65" />
   <Project Path="ArgosSharp.Application/ArgosSharp.Application.csproj" Id="929e3cc7-7f78-4500-a4b6-be109479b4a5" />
   <Project Path="ArgosSharp.Domain/ArgosSharp.Domain.csproj" Id="00cbd3a1-3a3d-4878-82ac-20723cf45195" />
