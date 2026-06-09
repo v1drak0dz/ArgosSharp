@@ -14,37 +14,36 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
     [ScraperSourceAnnotation(ScraperSourceEnum.Caraguatatuba)]
     public class CaraguatatubaScraper(IHttpFetcher _fetcher, IHtmlParser _parser, ILogger<CaraguatatubaScraper> _logger) : IScraperStrategy
     {
+        private const string BaseUrl = "https://www.caraguatatuba.sp.gov.br/pmc";
         public string Name => "caraguatatuba";
 
         public async Task<List<Noticia>> ProcessScraperAsync(string searchTerm, int depth)
         {
-            var noticiasRaw = new List<string>();
-            var noticias = new List<Noticia>();
+            var news = new List<string>();
 
             var termParsed = WebUtility.UrlEncode(searchTerm);
 
             _logger.LogInformation($"Initianting data gettering using term {searchTerm} in Caraguatatuba");
 
-            var html = await _fetcher.GetStringAsync($"https://www.caraguatatuba.sp.gov.br/pmc/?s={termParsed}");
+            var html = await _fetcher.GetStringAsync($"{BaseUrl}/?s={termParsed}");
 
             var maxPage = GetPaginationIfExists(html);
             var limit = Math.Min(maxPage, depth);
 
-            noticiasRaw.AddRange(GetNewsIfExists(html));
+            news.AddRange(GetNewsIfExists(html));
+            news.AddRange(await GetNewsFromPagination(termParsed, limit));
 
-            for (var i = 2; i <= limit; i++)
-            {
-                var _html = await _fetcher.GetStringAsync($"https://www.caraguatatuba.sp.gov.br/pmc/page/{i}/?s={termParsed}");
-                var news = GetNewsIfExists(_html);
-                if (news.Count > 0)
-                    noticiasRaw.AddRange(news);
-            }
+            return BuildResponseData(news);
+        }
 
-            foreach (var item in noticiasRaw)
+        private List<Noticia> BuildResponseData(List<string> news)
+        {
+            List<Noticia> formattedNews = [];
+            foreach (var item in news)
             {
                 var rawDate = _parser.QueryText(item, "span[class*='created-at']::text()");
                 DateTime.TryParseExact(rawDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date);
-                noticias.Add(
+                formattedNews.Add(
                     new Noticia(
                         title: _parser.QueryText(item, "h5 > a::text()") ?? "No title",
                         dateTime: date,
@@ -55,8 +54,20 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
                     )
                 );
             }
+            return formattedNews;
+        }
 
-            return noticias;
+        private async Task<List<string>> GetNewsFromPagination(string term, int maxPage)
+        {
+            List<string> newsRaw = [];
+            for (var i = 0; i <= maxPage; i++)
+            {
+                var html = await _fetcher.GetStringAsync($"{BaseUrl}/page/{i}/?s={term}");
+                var news = GetNewsIfExists(html);
+                if (news.Count > 0)
+                    newsRaw.AddRange(news);
+            }
+            return newsRaw;
         }
 
         private int GetPaginationIfExists(string document)
