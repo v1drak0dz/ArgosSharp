@@ -9,6 +9,7 @@ namespace ArgosSharp.Api.Mappers.JobMapper
     {
         public Job JobFromRequest(CreateJobRequest createJobRequest)
         {
+            // AutoMapper rules to map properties
             var sites = new List<ScraperSourceEnum>();
             
             foreach (var site in createJobRequest.Parameters.Sites)

@@ -18,7 +18,12 @@ namespace ArgosSharp.Api.Controllers
             {
                 var job = jobMapper.JobFromRequest(createJobDto);
                 await jobQueue.EnqueueAsync(job);
-                return Ok(new JobResponseDTO(JobStatusEnum.Created, Guid.NewGuid().ToString(), 1, []));
+                // Problematic, JobId is being incremented after being dequeued
+                // since we are responding before it being dequeued, how can I
+                // treat this case of needing a JobId.
+
+                // Try/Catch and Logging via Middleware
+                return Ok(new JobResponseDTO(job.Status, job.JobHash.ToString(), job.JobId, job.Data));
             }
             catch(Exception ex)
             {
