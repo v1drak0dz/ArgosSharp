@@ -23,7 +23,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
 
             var termParsed = WebUtility.UrlEncode(searchTerm);
 
-            _logger.LogInformation($"Initianting data gettering using term {searchTerm} in Caraguatatuba");
+            _logger.LogInformation("Initianting data gettering using term {SearchTerm} in Caraguatatuba", searchTerm);
 
             var html = await _fetcher.GetStringAsync($"{BaseUrl}/?s={termParsed}");
 
@@ -75,7 +75,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
             var pagination = _parser.QueryTexts(document, "ul[class*='pagination'] > li").ToList();
             var parsed = int.TryParse(pagination[^3], out int maxPage);
 
-            _logger.LogInformation($"Found {parsed} pages to scrape");
+            _logger.LogInformation("Found {PageQuantity} pages to scrape", parsed);
 
             return parsed ? maxPage : 1;
         }
@@ -84,7 +84,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
         {
             var noticias = _parser.QueryTexts(document, "div[id*='latestNews'] > div[class*='row']").ToList();
 
-            _logger.LogInformation($"Found {noticias.Count} news");
+            _logger.LogInformation("Found {NewsCount} news", noticias.Count);
 
             return noticias;
         }
