@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using ArgosSharp.Infrastructure.Utils;
 using ArgosSharp.Infrastructure.Mapper;
 
-
 namespace ArgosSharp.Infrastructure.Strategies.Scrapers
 {
     [ScraperSourceAnnotation(ScraperSourceEnum.Caraguatatuba)]

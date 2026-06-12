@@ -16,13 +16,12 @@ namespace ArgosSharp.Infrastructure.Mapper
         {
             var rawDate = parser.QueryText(html, selectors.Date);
             DateTime.TryParseExact(rawDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date);
-
             return new Noticia(
                 title: parser.QueryText(html, selectors.Title) ?? "No title",
                 dateTime: date,
                 year: date.Year,
                 link: parser.QueryText(html, selectors.Link) ?? "No link",
-                @abstract: parser.QueryText(html, selectors.Abstract),
+                @abstract: parser.QueryText(html, selectors.Abstract) ?? "",
                 source: source
             );
         }
