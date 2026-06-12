@@ -10,7 +10,6 @@ namespace ArgosSharp.Infrastructure.Http.Parser
         public string? QueryText(string html, string selector)
         {
             var document = htmlParser.ParseDocument(html);
-
             return document.QuerySelector(selector)?.TextContent.Trim();
         }
 
