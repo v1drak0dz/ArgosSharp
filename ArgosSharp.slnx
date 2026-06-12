@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="TestReport.ps1" />
+  </Folder>
   <Folder Name="/Tests/" />
   <Folder Name="/Tests/UnitTests/">
     <Project Path="ArgosSharp.Application.UnitTests/ArgosSharp.Application.UnitTests.csproj" Id="52ed77e6-0e27-4cd4-81f1-9c54d65ad797" />
