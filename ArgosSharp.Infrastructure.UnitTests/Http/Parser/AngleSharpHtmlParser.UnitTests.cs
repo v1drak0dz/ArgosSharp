@@ -1,6 +1,6 @@
 ﻿using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Infrastructure.Http.Parser;
-using FluentAssert;
+using FluentAssertions;
 using Moq;
 
 namespace ArgosSharp.Infrastructure.UnitTests.Http.Parser
@@ -27,7 +27,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Http.Parser
             var result = _htmlParser.QueryText(html, selector);
 
             // Assert
-            result.ShouldBeEqualTo(expected);
+            result.Should().Be(expected);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Http.Parser
             var result = _htmlParser.QueryTexts(html, selector);
 
             // Assert
-            result.ShouldBeEqualTo(["Item 1", "Item 2", "Item 3"]);
+            result.Should().BeEqualTo(["Item 1", "Item 2", "Item 3"]);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Http.Parser
             var result = _htmlParser.QueryText(html, "h1");
 
             // Assert
-            result.ShouldBeNull();
+            result.Should().Be(null);
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Http.Parser
             var result = _htmlParser.QueryText(html, "h1");
 
             // Assert
-            result.ShouldBeEqualTo("Hello");
+            result.Should().Be("Hello");
         }
     }
 }

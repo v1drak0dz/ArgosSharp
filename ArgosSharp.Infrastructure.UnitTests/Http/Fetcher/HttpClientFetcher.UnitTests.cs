@@ -1,6 +1,6 @@
 ﻿using ArgosSharp.Infrastructure.Http.Fetcher;
 using Moq;
-using FluentAssert;
+using FluentAssertions;
 using System.Net;
 using Moq.Protected;
 
@@ -48,7 +48,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Http.Fetcher
             var result = await _fetcher.GetStringAsync(TestURL);
 
             // Assert
-            result.ShouldBeEqualTo(TestExpected);
+            result.Should().Be(TestExpected);
         }
     }
 }
