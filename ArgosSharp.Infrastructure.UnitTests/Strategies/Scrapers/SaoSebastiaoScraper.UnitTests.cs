@@ -100,25 +100,31 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         [Test]
         public async Task ProcessScraperAsync_WhenNoPagination_ShouldReturnEmpty()
         {
+            // Arrange
             SetupFetcher();
             SetupPagination();
             SetupNews();
 
+            // Act
             var result = await _scraper.ProcessScraperAsync("test", 1);
 
+            // Assert
             result.Should().BeEmpty();
         }
 
         [Test]
         public async Task ProcessScraperAsync_ShouldCallPaginationUrls()
         {
+            // Arrange
             SetupFetcher();
             SetupPagination("1", "2", "3");
             SetupNews(NewsHtml);
             SetupMapping();
 
+            // Act
             await _scraper.ProcessScraperAsync("test", 2);
 
+            // Assert
             _fetcherMock.Verify(x =>
                 x.GetStringAsync(It.Is<string>(url => url.Contains("&pg="))),
                 Times.AtLeastOnce);
@@ -127,18 +133,22 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         [Test]
         public async Task ProcessScraperAsync_WhenNoNews_ShouldReturnEmptyList()
         {
+            // Arrange
             SetupFetcher();
             SetupPagination("1", "2", "3");
             SetupNews();
 
+            // Act
             var result = await _scraper.ProcessScraperAsync("test", 1);
 
+            // Assert
             result.Should().BeEmpty();
         }
 
         [Test]
         public async Task ProcessScraperAsync_ShouldUseFallbackValues_WhenMissingFields()
         {
+            // Arrange
             SetupFetcher();
             SetupPagination("1", "2", "3");
             SetupNews(NewsHtml);
@@ -150,14 +160,17 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
                     return selector.Contains("notice-date") ? "01/01/2024" : null;
                 });
 
+            // Act
             var result = await _scraper.ProcessScraperAsync("test", 1);
 
+            // Assert
             result[0].Title.Should().Be("No title");
         }
 
         [Test]
         public async Task ProcessScraperAsync_WhenInvalidDate_ShouldNotThrow()
         {
+            // Arrange
             SetupFetcher();
             SetupPagination("1", "2", "3");
             SetupNews(NewsHtml);
@@ -166,20 +179,25 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
                 .Setup(x => x.QueryText(NewsHtml, It.IsAny<string>()))
                 .Returns("invalid-date");
 
+            // Act
             Func<Task> act = () => _scraper.ProcessScraperAsync("test", 1);
 
+            // Assert
             await act.Should().NotThrowAsync();
         }
 
         [Test]
         public async Task ProcessScraperAsync_WhenFetcherFails_ShouldThrowException()
         {
+            // Arrange
             _fetcherMock
                 .Setup(x => x.GetStringAsync(It.IsAny<string>()))
                 .ThrowsAsync(new Exception("Error"));
 
+            // Act
             Func<Task> act = () => _scraper.ProcessScraperAsync("test", 1);
 
+            // Assert
             await act
                 .Should()
                 .ThrowAsync<Exception>()
