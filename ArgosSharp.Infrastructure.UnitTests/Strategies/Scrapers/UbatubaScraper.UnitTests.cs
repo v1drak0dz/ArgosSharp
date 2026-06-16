@@ -12,6 +12,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         private Mock<IHttpFetcher> _fetcherMock;
         private Mock<IHtmlParser> _parserMock;
         private Mock<ILogger<UbatubaScraper>> _loggerMock;
+        private MockRepository _mockRepository;
 
         private UbatubaScraper _scraper;
 
@@ -21,15 +22,22 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         [SetUp]
         public void Setup()
         {
-            _fetcherMock = new Mock<IHttpFetcher>();
-            _parserMock = new Mock<IHtmlParser>();
-            _loggerMock = new Mock<ILogger<UbatubaScraper>>();
+            _mockRepository = new MockRepository(MockBehavior.Strict);
+            _fetcherMock = _mockRepository.Create<IHttpFetcher>();
+            _parserMock = _mockRepository.Create<IHtmlParser>();
+            _loggerMock = _mockRepository.Create<ILogger<UbatubaScraper>>();
 
             _scraper = new UbatubaScraper(
                 _loggerMock.Object,
                 _fetcherMock.Object,
                 _parserMock.Object
             );
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _mockRepository.VerifyAll();
         }
 
         private void SetupFetcher()
@@ -68,9 +76,9 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
                     return selector switch
                     {
                         var s when s.Contains("time") => "01/01/2024",
-                        var s when s.Contains("a::text") => "Titulo Teste",
+                        var s when s.Contains("a::text") => "Title test",
                         var s when s.Contains("href") => "http://link.com",
-                        var s when s.Contains("excerpt") => "Resumo",
+                        var s when s.Contains("excerpt") => "Summary",
                         _ => null
                     };
                 });
@@ -86,11 +94,11 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             SetupMapping();
 
             // Act
-            var result = await _scraper.ProcessScraperAsync("teste", 1);
+            var result = await _scraper.ProcessScraperAsync("test", 1);
 
             // Assert
             result.Should().HaveCount(1);
-            result[0].Title.Should().Be("Titulo Teste");
+            result[0].Title.Should().Be("Title test");
             result[0].Link.Should().Be("http://link.com");
         }
 
@@ -98,10 +106,10 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         public async Task ProcessScraperAsync_WhenNoPagination_ShouldReturnEmpty()
         {
             SetupFetcher();
-            SetupPagination(); // vazio
+            SetupPagination();
             SetupNews();
 
-            var result = await _scraper.ProcessScraperAsync("teste", 1);
+            var result = await _scraper.ProcessScraperAsync("test", 1);
 
             result.Should().BeEmpty();
         }
@@ -110,11 +118,11 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         public async Task ProcessScraperAsync_ShouldCallFetcherForPagination()
         {
             SetupFetcher();
-            SetupPagination("1", "2", "3"); // maxPage = 3
+            SetupPagination("1", "2", "3");
             SetupNews(NewsHtml);
             SetupMapping();
 
-            await _scraper.ProcessScraperAsync("teste", 3);
+            await _scraper.ProcessScraperAsync("test", 3);
 
             _fetcherMock.Verify(
                 x => x.GetStringAsync(It.Is<string>(url => url.Contains("/page/2"))),
@@ -128,7 +136,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             SetupPagination("1", "2", "3", "4");
             SetupNews();
 
-            await _scraper.ProcessScraperAsync("teste", 1);
+            await _scraper.ProcessScraperAsync("test", 1);
 
             _fetcherMock.Verify(
                 x => x.GetStringAsync(It.Is<string>(url => url.Contains("/page/"))),
@@ -142,7 +150,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             SetupPagination("1", "2", "3");
             SetupNews();
 
-            var result = await _scraper.ProcessScraperAsync("teste", 1);
+            var result = await _scraper.ProcessScraperAsync("test", 1);
 
             result.Should().BeEmpty();
         }
@@ -156,12 +164,9 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
 
             _parserMock
                 .Setup(x => x.QueryText(NewsHtml, It.IsAny<string>()))
-                .Returns((string _, string selector) =>
-                {
-                    return selector.Contains("time") ? "01/01/2024" : null;
-                });
+                .Returns((string _, string selector) => selector.Contains("time") ? "01/01/2024" : null);
 
-            var result = await _scraper.ProcessScraperAsync("teste", 1);
+            var result = await _scraper.ProcessScraperAsync("test", 1);
 
             result[0].Title.Should().Be("No title");
             result[0].Link.Should().Be("No link");
@@ -178,7 +183,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
                 .Setup(x => x.QueryText(NewsHtml, It.IsAny<string>()))
                 .Returns("invalid-date");
 
-            Func<Task> act = () => _scraper.ProcessScraperAsync("teste", 1);
+            Func<Task> act = () => _scraper.ProcessScraperAsync("test", 1);
 
             await act.Should().NotThrowAsync();
         }
@@ -188,14 +193,14 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         {
             _fetcherMock
                 .Setup(x => x.GetStringAsync(It.IsAny<string>()))
-                .ThrowsAsync(new Exception("Erro"));
+                .ThrowsAsync(new Exception("Error"));
 
-            Func<Task> act = () => _scraper.ProcessScraperAsync("teste", 1);
+            Func<Task> act = () => _scraper.ProcessScraperAsync("test", 1);
 
             await act
                 .Should()
                 .ThrowAsync<Exception>()
-                .WithMessage("Erro");
+                .WithMessage("Error");
         }
     }
 }

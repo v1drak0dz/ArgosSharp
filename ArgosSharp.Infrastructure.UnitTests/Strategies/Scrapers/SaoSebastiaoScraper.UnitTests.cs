@@ -12,6 +12,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         private Mock<IHttpFetcher> _fetcherMock;
         private Mock<IHtmlParser> _parserMock;
         private Mock<ILogger<SaoSebastiaoScraper>> _loggerMock;
+        private MockRepository _mockRepository;
 
         private SaoSebastiaoScraper _scraper;
 
@@ -21,15 +22,22 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         [SetUp]
         public void Setup()
         {
-            _fetcherMock = new Mock<IHttpFetcher>();
-            _parserMock = new Mock<IHtmlParser>();
-            _loggerMock = new Mock<ILogger<SaoSebastiaoScraper>>();
+            _mockRepository = new MockRepository(MockBehavior.Strict);
+            _fetcherMock = _mockRepository.Create<IHttpFetcher>();
+            _parserMock = _mockRepository.Create<IHtmlParser>();
+            _loggerMock = _mockRepository.Create<ILogger<SaoSebastiaoScraper>>();
 
             _scraper = new SaoSebastiaoScraper(
                 _loggerMock.Object,
                 _fetcherMock.Object,
                 _parserMock.Object
             );
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _mockRepository.VerifyAll();
         }
 
         private void SetupFetcher()
@@ -65,7 +73,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
                     return selector switch
                     {
                         var s when s.Contains("notice-date") => "01/01/2024",
-                        var s when s.Contains("a::text") => "Titulo Teste",
+                        var s when s.Contains("a::text") => "Title test",
                         var s when s.Contains("href") => "http://link.com",
                         _ => null
                     };
@@ -82,11 +90,11 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             SetupMapping();
 
             // Act
-            var result = await _scraper.ProcessScraperAsync("teste", 1);
+            var result = await _scraper.ProcessScraperAsync("test", 1);
 
             // Assert
             result.Should().HaveCount(1);
-            result[0].Title.Should().Be("Titulo Teste");
+            result[0].Title.Should().Be("Title test");
         }
 
         [Test]
@@ -96,7 +104,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             SetupPagination();
             SetupNews();
 
-            var result = await _scraper.ProcessScraperAsync("teste", 1);
+            var result = await _scraper.ProcessScraperAsync("test", 1);
 
             result.Should().BeEmpty();
         }
@@ -109,7 +117,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             SetupNews(NewsHtml);
             SetupMapping();
 
-            await _scraper.ProcessScraperAsync("teste", 2);
+            await _scraper.ProcessScraperAsync("test", 2);
 
             _fetcherMock.Verify(x =>
                 x.GetStringAsync(It.Is<string>(url => url.Contains("&pg="))),
@@ -123,7 +131,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             SetupPagination("1", "2", "3");
             SetupNews();
 
-            var result = await _scraper.ProcessScraperAsync("teste", 1);
+            var result = await _scraper.ProcessScraperAsync("test", 1);
 
             result.Should().BeEmpty();
         }
@@ -142,7 +150,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
                     return selector.Contains("notice-date") ? "01/01/2024" : null;
                 });
 
-            var result = await _scraper.ProcessScraperAsync("teste", 1);
+            var result = await _scraper.ProcessScraperAsync("test", 1);
 
             result[0].Title.Should().Be("No title");
         }
@@ -158,7 +166,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
                 .Setup(x => x.QueryText(NewsHtml, It.IsAny<string>()))
                 .Returns("invalid-date");
 
-            Func<Task> act = () => _scraper.ProcessScraperAsync("teste", 1);
+            Func<Task> act = () => _scraper.ProcessScraperAsync("test", 1);
 
             await act.Should().NotThrowAsync();
         }
@@ -168,14 +176,14 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         {
             _fetcherMock
                 .Setup(x => x.GetStringAsync(It.IsAny<string>()))
-                .ThrowsAsync(new Exception("Erro"));
+                .ThrowsAsync(new Exception("Error"));
 
-            Func<Task> act = () => _scraper.ProcessScraperAsync("teste", 1);
+            Func<Task> act = () => _scraper.ProcessScraperAsync("test", 1);
 
             await act
                 .Should()
                 .ThrowAsync<Exception>()
-                .WithMessage("Erro");
+                .WithMessage("Error");
         }
     }
 }
