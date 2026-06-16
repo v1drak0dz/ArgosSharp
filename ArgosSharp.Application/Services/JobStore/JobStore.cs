@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 
 namespace ArgosSharp.Application.Services.JobStore
 {
-    public class JobStory(IPersistenceService persistenceService) : IJobStore
+    public class JobStore(IPersistenceService persistenceService) : IJobStore
     {
         private readonly ConcurrentDictionary<Guid, Job> _jobs = new();
         private readonly SemaphoreSlim saveLock = new(1, 1);
