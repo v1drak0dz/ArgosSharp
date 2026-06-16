@@ -27,6 +27,13 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             _parserMock = _mockRepository.Create<IHtmlParser>();
             _loggerMock = _mockRepository.Create<ILogger<CaraguatatubaScraper>>();
 
+            _loggerMock.Setup(x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(), 
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
+
             _scraper = new CaraguatatubaScraper(
                 _fetcherMock.Object,
                 _parserMock.Object,

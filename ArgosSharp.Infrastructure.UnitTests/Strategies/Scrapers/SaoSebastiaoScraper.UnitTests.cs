@@ -27,6 +27,13 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             _parserMock = _mockRepository.Create<IHtmlParser>();
             _loggerMock = _mockRepository.Create<ILogger<SaoSebastiaoScraper>>();
 
+            _loggerMock.Setup(x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
+
             _scraper = new SaoSebastiaoScraper(
                 _loggerMock.Object,
                 _fetcherMock.Object,

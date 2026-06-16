@@ -27,6 +27,13 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             _parserMock = _mockRepository.Create<IHtmlParser>();
             _loggerMock = _mockRepository.Create<ILogger<UbatubaScraper>>();
 
+            _loggerMock.Setup(x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
+
             _scraper = new UbatubaScraper(
                 _loggerMock.Object,
                 _fetcherMock.Object,
@@ -43,13 +50,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         private void SetupFetcher()
         {
             _fetcherMock
-                .Setup(x => x.GetStringAsync(It.Is<string>(url =>
-                    !url.Contains("/page/"))))
-                .ReturnsAsync(Html);
-
-            _fetcherMock
-                .Setup(x => x.GetStringAsync(It.Is<string>(url =>
-                    url.Contains("/page/"))))
+                .Setup(x => x.GetStringAsync(It.IsAny<string>()))
                 .ReturnsAsync(Html);
         }
 
