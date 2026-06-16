@@ -25,7 +25,7 @@ namespace ArgosSharp.Api
 
             services.AddScoped<IPersistenceService, PersistenceService>();
             services.AddScoped<IJobFactory, JobFactory>();
-            services.AddScoped<IJobStore, InMemoryJobStore>();
+            services.AddScoped<IJobStore, JobStory>();
 
             // Trying to understand that this following 2 lines starts 2 workers
             services.AddHostedService<JobWorker>();
