@@ -12,9 +12,7 @@ namespace ArgosSharp.Application.Services.JobProcessor
         {
             try
             {
-                job.Status = JobStatusEnum.Processing;
-
-                await jobStore.UpdateAsync(job);
+                await UpdateJobStatus(job, JobStatusEnum.Processing);
 
                 var sources = job.Parameters.Sites.AsEnumerable();
                 var depth = job.Parameters.Depth;
@@ -23,16 +21,19 @@ namespace ArgosSharp.Application.Services.JobProcessor
 
                 job.Data = data;
 
-                job.Status = JobStatusEnum.Completed;
-
-                await jobStore.UpdateAsync(job);
+                await UpdateJobStatus(job, JobStatusEnum.Completed);
             }
             catch (Exception ex)
             {
-                job.Status = JobStatusEnum.Failed;
                 job.Error = ex.Message;
-                await jobStore.UpdateAsync(job);
+                await UpdateJobStatus(job, JobStatusEnum.Failed);
             }
+        }
+
+        private async Task UpdateJobStatus(Job job, JobStatusEnum status)
+        {
+            job.Status = status;
+            await jobStore.UpdateAsync(job);
         }
     }
 }

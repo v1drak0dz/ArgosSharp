@@ -10,9 +10,24 @@ namespace ArgosSharp.Application.StrategiesContext.Scraper
     {
         public async Task<List<Noticia>> GetNoticiasBySourceAsync(ScraperSourceEnum scraperSource, string searchTerm, int depth)
         {
-            var scrapers = Assembly.GetExecutingAssembly().GetTypes().Where(x => typeof(IScraperStrategy).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
-            
-            foreach(var scraper in scrapers)
+            var scrapers = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => !a.IsDynamic)
+                .SelectMany(a =>
+                {
+                    try
+                    {
+                        return a.GetTypes();
+                    }
+                    catch (ReflectionTypeLoadException ex)
+                    {
+                        return ex.Types.Where(t => t is not null)!;
+                    }
+                })
+                .Where(x => x is not null)
+                .Cast<Type>()
+                .Where(x => typeof(IScraperStrategy).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
+
+            foreach (var scraper in scrapers)
             {
                 var attr = scraper.GetCustomAttribute<ScraperSourceAnnotation>();
 
