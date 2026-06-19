@@ -1,54 +1,17 @@
 ﻿using ArgosSharp.Application.Interfaces.Strategies;
-using ArgosSharp.Domain.Annotations;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
-using System.Reflection;
 
 namespace ArgosSharp.Application.StrategiesContext.Scraper
 {
     public class ScraperStrategyContext : IScraperStrategyContext
     {
-        public async Task<List<Noticia>> GetNoticiasBySourceAsync(ScraperSourceEnum scraperSource, string searchTerm, int depth)
-        {
-            var scrapers = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => !a.IsDynamic)
-                .SelectMany(a =>
-                {
-                    try
-                    {
-                        return a.GetTypes();
-                    }
-                    catch (ReflectionTypeLoadException ex)
-                    {
-                        // TODO: This line is current not being coverade,
-                        // I don't know how to properly test the reflection yet,
-                        // so this will be done later!
-                        return ex.Types.Where(t => t is not null)!;
-                    }
-                })
-                .Where(x => x is not null)
-                .Cast<Type>()
-                .Where(x => typeof(IScraperStrategy).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
+        private readonly Dictionary<string, IScraperStrategy> _strategies;
 
-            foreach (var scraper in scrapers)
-            {
-                var attr = scraper.GetCustomAttribute<ScraperSourceAnnotation>();
+        public ScraperStrategyContext(IEnumerable<IScraperStrategy> strategies) =>
+            _strategies = strategies.ToDictionary(s => s.Name);
 
-                if (attr is null)
-                    continue;
-
-                if (attr.ScraperSource == scraperSource)
-                {
-                    var instance = Activator.CreateInstance(scraper) as IScraperStrategy;
-
-                    if (instance is null)
-                        continue;
-
-                    return await instance.ProcessScraperAsync(searchTerm, depth);
-                }
-            }
-
-            throw new Exception($"No Scraper found for source {scraperSource}");
-        }
+        public async Task<List<Noticia>> GetNoticiasBySourceAsync(ScraperSourceEnum scraperSource, string searchTerm, int depth) =>
+            await _strategies[scraperSource.ToString()].ProcessScraperAsync(searchTerm, depth);
     }
 }

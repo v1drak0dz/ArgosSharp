@@ -2,20 +2,16 @@
 using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Application.Interfaces.Strategies;
 using ArgosSharp.Domain.ValueObjects;
-using ArgosSharp.Domain.Annotations;
-using ArgosSharp.Domain.Enums;
 using System.Net;
-using System.Globalization;
 using Microsoft.Extensions.Logging;
 using ArgosSharp.Infrastructure.Utils;
 using ArgosSharp.Infrastructure.Mapper;
 
 namespace ArgosSharp.Infrastructure.Strategies.Scrapers
 {
-    [ScraperSourceAnnotation(ScraperSourceEnum.Caraguatatuba)]
     public class CaraguatatubaScraper(IHttpFetcher _fetcher, IHtmlParser _parser, ILogger<CaraguatatubaScraper> _logger) : IScraperStrategy
     {
-        public string Name => "caraguatatuba";
+        public string Name { get; set; } = "caraguatatuba";
 
         private const string BaseUrl = "https://www.caraguatatuba.sp.gov.br/pmc";
 

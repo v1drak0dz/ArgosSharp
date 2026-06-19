@@ -5,6 +5,7 @@
         Caraguatatuba,
         Ubatuba,
         SaoSebastiao,
-        TestSource = 9999
+        ValidTestSource = 9998,
+        InvalidTestSource = 9999
     }
 }

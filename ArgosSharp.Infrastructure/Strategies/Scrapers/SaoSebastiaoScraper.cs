@@ -1,21 +1,17 @@
 ﻿using ArgosSharp.Application.Interfaces.Fetcher;
 using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Application.Interfaces.Strategies;
-using ArgosSharp.Domain.Annotations;
-using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
 using ArgosSharp.Infrastructure.Mapper;
 using ArgosSharp.Infrastructure.Utils;
 using Microsoft.Extensions.Logging;
-using System.Globalization;
 using System.Net;
 
 namespace ArgosSharp.Infrastructure.Strategies.Scrapers
 {
-    [ScraperSourceAnnotation(ScraperSourceEnum.SaoSebastiao)]
     public class SaoSebastiaoScraper(ILogger<SaoSebastiaoScraper> _logger, IHttpFetcher _fetcher, IHtmlParser _parser) : IScraperStrategy
     {
-        public string Name => "sao_sebastiao";
+        public string Name { get; set; } = "sao_sebastiao";
 
         private const string BaseUrl = "https://www.saosebastiao.sp.gov.br/";
         private const string BaseSearch = BaseUrl + "noticia-lista.asp?idTitulo=";

@@ -66,10 +66,6 @@ namespace ArgosSharp.Application.UnitTests.Services
         [Test]
         public async Task LoadAsync_ShouldReturnEmptyList_WhenFileDoesNotExist()
         {
-            // Arrange
-            if (File.Exists(_testFilePath))
-                File.Delete(_testFilePath);
-
             // Act
             var loaded = await _service.LoadAsync();
 
