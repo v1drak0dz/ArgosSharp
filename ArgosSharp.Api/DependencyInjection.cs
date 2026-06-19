@@ -1,14 +1,18 @@
 ﻿using ArgosSharp.Application.Interfaces.Fetcher;
 using ArgosSharp.Application.Interfaces.Parser;
+using ArgosSharp.Application.Interfaces.Persistence;
+using ArgosSharp.Application.Interfaces.Repositories;
 using ArgosSharp.Application.Interfaces.Strategies;
+using ArgosSharp.Application.Interfaces.UnitOfWork;
 using ArgosSharp.Application.Services.JobQueue;
-using ArgosSharp.Application.Services.JobStore;
 using ArgosSharp.Application.Services.JobWorker;
-using ArgosSharp.Application.Services.PersistenceService;
 using ArgosSharp.Domain.Factories.JobFactory;
 using ArgosSharp.Infrastructure.Http.Fetcher;
 using ArgosSharp.Infrastructure.Http.Parser;
+using ArgosSharp.Infrastructure.Persistence;
+using ArgosSharp.Infrastructure.Repositories;
 using ArgosSharp.Infrastructure.Strategies.Scrapers;
+using ArgosSharp.Infrastructure.UnitOfWork;
 
 namespace ArgosSharp.Api
 {
@@ -23,9 +27,10 @@ namespace ArgosSharp.Api
 
             services.AddSingleton<IJobQueue, JobQueue>();
 
-            services.AddScoped<IPersistenceService, PersistenceService>();
+            services.AddScoped<IJobPersistence, JobPersistence>();
             services.AddScoped<IJobFactory, JobFactory>();
-            services.AddScoped<IJobStore, JobStore>();
+            services.AddScoped<IJobRepository, JobRepository>();
+            services.AddScoped<IJobUnitOfWork, JobUnitOfWork>();
 
             // Trying to understand that this following 2 lines starts 2 workers
             services.AddHostedService<JobWorker>();

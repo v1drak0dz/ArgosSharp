@@ -1,22 +1,23 @@
-﻿using FluentAssertions;
-using ArgosSharp.Application.Services.PersistenceService;
+﻿using ArgosSharp.Application.Interfaces.Persistence;
+using FluentAssertions;
 using ArgosSharp.Domain.ValueObjects;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.Factories.JobFactory;
+using ArgosSharp.Infrastructure.Persistence;
 
 namespace ArgosSharp.Application.UnitTests.Services
 {
     public class PersistenceServiceTests
     {
         private string _testFilePath;
-        private PersistenceService _service;
+        private IJobPersistence _service;
         private JobFactory _jobFactory;
 
         [SetUp]
         public void Setup()
         {
             _testFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.json");
-            _service = new PersistenceService(_testFilePath);
+            _service = new JobPersistence(_testFilePath);
             _jobFactory = new JobFactory();
         }
 

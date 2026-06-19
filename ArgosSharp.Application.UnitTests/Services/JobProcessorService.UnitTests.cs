@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
+﻿using ArgosSharp.Application.Interfaces.Repositories;
+using FluentAssertions;
 using Moq;
 using ArgosSharp.Application.Services.JobProcessor;
-using ArgosSharp.Application.Services.JobStore;
 using ArgosSharp.Application.UseCase.Scraper;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
@@ -11,7 +11,7 @@ namespace ArgosSharp.Application.UnitTests.Services
 {
     public class JobProcessorServiceTests
     {
-        private Mock<IJobStore> _jobStoreMock;
+        private Mock<IJobRepository> _jobStoreMock;
         private Mock<IScraperProcessor> _scraperProcessorMock;
         private MockRepository _mockRepository;
         private JobProcessorService _service;
@@ -29,7 +29,7 @@ namespace ArgosSharp.Application.UnitTests.Services
 
         private void SetupJobStore()
         {
-            _jobStoreMock = _mockRepository.Create<IJobStore>();
+            _jobStoreMock = _mockRepository.Create<IJobRepository>();
             _jobStoreMock.Setup(x => x.UpdateAsync(It.IsAny<Job>())).Returns(Task.CompletedTask);
         }
 

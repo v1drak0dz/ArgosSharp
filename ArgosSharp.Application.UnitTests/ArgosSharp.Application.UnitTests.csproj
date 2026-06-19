@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ArgosSharp.Application\ArgosSharp.Application.csproj" />
     <ProjectReference Include="..\ArgosSharp.Domain\ArgosSharp.Domain.csproj" />
+    <ProjectReference Include="..\ArgosSharp.Infrastructure\ArgosSharp.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
