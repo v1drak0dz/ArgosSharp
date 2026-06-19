@@ -4,6 +4,7 @@
   </Folder>
   <Folder Name="/Tests/" />
   <Folder Name="/Tests/UnitTests/">
+    <Project Path="ArgoSharp.Api.UnitTests/ArgoSharp.Api.UnitTests.csproj" Id="f64ab5ed-3e9c-482b-98a8-9fab5b79b923" />
     <Project Path="ArgosSharp.Application.UnitTests/ArgosSharp.Application.UnitTests.csproj" Id="52ed77e6-0e27-4cd4-81f1-9c54d65ad797" />
     <Project Path="ArgosSharp.Infrastructure.UnitTests/ArgosSharp.Infrastructure.UnitTests.csproj" Id="6a395520-6747-4f4f-a237-df435d23980e" />
   </Folder>

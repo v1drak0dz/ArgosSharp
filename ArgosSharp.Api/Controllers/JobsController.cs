@@ -1,6 +1,5 @@
 ﻿using ArgosSharp.Api.DTOs.Job;
 using ArgosSharp.Application.Services.JobQueue;
-using ArgosSharp.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using ArgosSharp.Api.DTOs.Job.CreateJob;
 using ArgosSharp.Api.Mappers.JobMapper;
