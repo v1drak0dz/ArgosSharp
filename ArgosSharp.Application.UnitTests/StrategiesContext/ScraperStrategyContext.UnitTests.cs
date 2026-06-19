@@ -59,7 +59,7 @@ namespace ArgosSharp.Application.UnitTests.StrategiesContext
 
             // Act
             Func<Task> act = async () =>
-                await context.GetNoticiasBySourceAsync(ScraperSourceEnum.Ubatuba, "teste", 1);
+                await context.GetNoticiasBySourceAsync(ScraperSourceEnum.TestSource, "teste", 1);
 
             // Assert
             act.Should().ThrowAsync<Exception>()

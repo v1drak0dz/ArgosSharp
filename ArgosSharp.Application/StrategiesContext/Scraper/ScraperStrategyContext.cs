@@ -20,6 +20,9 @@ namespace ArgosSharp.Application.StrategiesContext.Scraper
                     }
                     catch (ReflectionTypeLoadException ex)
                     {
+                        // TODO: This line is current not being coverade,
+                        // I don't know how to properly test the reflection yet,
+                        // so this will be done later!
                         return ex.Types.Where(t => t is not null)!;
                     }
                 })
