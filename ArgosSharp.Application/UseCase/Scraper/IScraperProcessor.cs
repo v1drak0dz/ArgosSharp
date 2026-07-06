@@ -5,6 +5,16 @@ namespace ArgosSharp.Application.UseCase.Scraper
 {
     public interface IScraperProcessor
     {
-        Task<List<Noticia>> GetNoticias(string searchTerm, int depth, IEnumerable<ScraperSourceEnum> scraperSources);
+        /// <summary>
+        /// Retrieves news items (Noticia) from the configured scraper sources for the
+        /// provided search term and depth. The method queries each source via the
+        /// scraper strategy context and aggregates the results into a single list.
+        /// </summary>
+        /// <param name="searchTerm">The search term to look for in each source.</param>
+        /// <param name="depth">The scraping depth to apply when querying sources.</param>
+        /// <param name="scraperSources">A collection of source identifiers to query.</param>
+        /// <returns>A list of aggregated <see cref="Noticia"/> instances from all sources.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when searchTerm is null or empty, or when depth is negative.</exception>
+        Task<List<Noticia>> GetNoticias(string searchTerm, int depth, IEnumerable<string> scraperSources);
     }
 }

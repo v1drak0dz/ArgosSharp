@@ -6,7 +6,8 @@ namespace ArgosSharp.Application.UseCase.Scraper
 {
     public class ScraperProcessor(IScraperStrategyContext scraperStrategyContext) : IScraperProcessor
     {
-        public async Task<List<Noticia>> GetNoticias(string searchTerm, int depth, IEnumerable<ScraperSourceEnum> scraperSources)
+        /// <inheritdoc cref = "IScraperProcessor" />
+        public async Task<List<Noticia>> GetNoticias(string searchTerm, int depth, IEnumerable<string> scraperSources)
         {
             if (string.IsNullOrEmpty(searchTerm))
                 throw new ArgumentNullException();
@@ -15,8 +16,6 @@ namespace ArgosSharp.Application.UseCase.Scraper
                 throw new ArgumentNullException();
 
             var noticias = new List<Noticia>();
-
-            // source, string to enum convertion
 
             foreach (var source in scraperSources)
             {

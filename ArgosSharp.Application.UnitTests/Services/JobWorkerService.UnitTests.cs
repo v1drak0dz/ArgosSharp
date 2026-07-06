@@ -23,7 +23,7 @@ namespace ArgosSharp.Application.UnitTests.Services
         public async Task ExecuteAsync_ShouldProcessJob_FromQueue()
         {
             // Arrange
-            var job = _jobFactory.Create("job2", new JobParameters([ScraperSourceEnum.Caraguatatuba], 1));
+            var job = _jobFactory.Create("job2", depth: 1, sites: ["caraguatatuba"]);
 
             var jobQueueMock = new Mock<IJobQueue>();
             jobQueueMock.Setup(q => q.DequeueAsync(It.IsAny<CancellationToken>()))

@@ -1,18 +1,19 @@
-﻿using ArgosSharp.Application.Interfaces.Repositories;
+﻿using ArgosSharp.Application.Interfaces.UnitOfWork;
 using ArgosSharp.Application.UseCase.Scraper;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
 
 namespace ArgosSharp.Application.Services.JobProcessor
 {
-    public class JobProcessorService(IScraperProcessor scraperProcessor, IJobRepository jobStore) : IJobProcessorService
+    public class JobProcessorService(IScraperProcessor scraperProcessor, IJobUnitOfWork jobUnitOfWork) : IJobProcessorService
     {
 
+        /// <inheritdoc cref="IJobProcessorService"/>
         public async Task ProcessJobAsync(Job job)
         {
             try
             {
-                await UpdateJobStatus(job, JobStatusEnum.Processing);
+                await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Processing);
 
                 var sources = job.Parameters.Sites.AsEnumerable();
                 var depth = job.Parameters.Depth;
@@ -21,19 +22,13 @@ namespace ArgosSharp.Application.Services.JobProcessor
 
                 job.Data = data;
 
-                await UpdateJobStatus(job, JobStatusEnum.Completed);
+                await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Completed);
             }
             catch (Exception ex)
             {
                 job.Error = ex.Message;
-                await UpdateJobStatus(job, JobStatusEnum.Failed);
+                await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Failed);
             }
-        }
-
-        private async Task UpdateJobStatus(Job job, JobStatusEnum status)
-        {
-            job.Status = status;
-            await jobStore.UpdateAsync(job);
         }
     }
 }

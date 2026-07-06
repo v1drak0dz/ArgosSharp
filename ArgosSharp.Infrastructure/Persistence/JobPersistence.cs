@@ -10,6 +10,7 @@ namespace ArgosSharp.Infrastructure.Persistence
         private readonly JsonSerializerOptions SerializerOptions = new() { WriteIndented = true };
         private readonly SemaphoreSlim _lock = new(1, 1);
 
+        /// <inheritdoc cref="IJobPersistence">
         public async Task SaveAsync(IEnumerable<Job> jobs)
         {
             await _lock.WaitAsync();
@@ -28,6 +29,7 @@ namespace ArgosSharp.Infrastructure.Persistence
             }
         }
 
+        /// <inheritdoc cref="IJobPersistence">
         public async Task<List<Job>> LoadAsync()
         {
             if (!File.Exists(FilePath))
