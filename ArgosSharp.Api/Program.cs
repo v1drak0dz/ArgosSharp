@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 #region [Dependecies Injection]
 
 builder.Services.AddInfrastructure();
+builder.Services.AddJobDependencies();
 builder.Services.AddValidators();
 
 #endregion [Dependencies Injection]
