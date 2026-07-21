@@ -1,11 +1,11 @@
-﻿using ArgosSharp.Application.Services.JobStore;
+﻿using ArgosSharp.Application.Interfaces.Repositories;
 using ArgosSharp.Application.UseCase.Scraper;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
 
 namespace ArgosSharp.Application.Services.JobProcessor
 {
-    public class JobProcessorService(IScraperProcessor scraperProcessor, IJobStore jobStore) : IJobProcessorService
+    public class JobProcessorService(IScraperProcessor scraperProcessor, IJobRepository jobStore) : IJobProcessorService
     {
 
         public async Task ProcessJobAsync(Job job)
