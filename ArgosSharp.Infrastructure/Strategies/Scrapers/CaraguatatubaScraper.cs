@@ -2,27 +2,28 @@
 using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Application.Interfaces.Strategies;
 using ArgosSharp.Domain.ValueObjects;
-using ArgosSharp.Domain.Annotations;
-using ArgosSharp.Domain.Enums;
 using System.Net;
-using System.Globalization;
 using Microsoft.Extensions.Logging;
-
+using ArgosSharp.Infrastructure.Utils;
+using ArgosSharp.Infrastructure.Mapper;
 
 namespace ArgosSharp.Infrastructure.Strategies.Scrapers
 {
-    [ScraperSourceAnnotation(ScraperSourceEnum.Caraguatatuba)]
     public class CaraguatatubaScraper(IHttpFetcher _fetcher, IHtmlParser _parser, ILogger<CaraguatatubaScraper> _logger) : IScraperStrategy
     {
-        public string Name => "caraguatatuba";
+        public string Name { get; set; } = "caraguatatuba";
 
         private const string BaseUrl = "https://www.caraguatatuba.sp.gov.br/pmc";
-        private const string DateQuery = "span[class*='created-at']::text()";
-        private const string TitleQuery = "h5 > a::text()";
-        private const string LinkQuery = "h5 > a::attr(href)";
-        private const string AbstractQuery = "div[class*='news-text'] > p::text()";
-        private const string PaginationQuery = "ul[class*='pagination'] > li";
-        private const string NewsQuery = "div[id*='latestNews'] > div[class*='row']";
+
+        private static readonly ScraperSelectors Selectors = new()
+        {
+            Date = "span[class*='created-at']::text()",
+            Title = "h5 > a::text()",
+            Link = "h5 > a::attr(href)",
+            Abstract = "div[class*='news-text'] > p::text()",
+            Pagination = "ul[class*='pagination'] > li",
+            News = "div[id*='latestNews'] > div[class*='row']"
+        };
 
         public async Task<List<Noticia>> ProcessScraperAsync(string searchTerm, int depth)
         {
@@ -30,7 +31,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
 
             var termParsed = WebUtility.UrlEncode(searchTerm);
 
-            _logger.LogInformation("Initianting data gettering using term {SearchTerm} in Caraguatatuba", searchTerm);
+            _logger.LogInformation("Initiating data gathering using term {SearchTerm} in Caraguatatuba", searchTerm);
 
             var html = await _fetcher.GetStringAsync($"{BaseUrl}/?s={termParsed}");
 
@@ -40,22 +41,23 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
             news.AddRange(GetNewsIfExists(html));
             news.AddRange(await GetNewsFromPagination(termParsed, limit));
 
-            return BuildResponseData(news);
+            return [.. news.Select(x => NoticiaMapper.Map(x, _parser, Selectors, Name))];
         }
 
         private int GetPaginationIfExists(string document)
         {
-            var pagination = _parser.QueryTexts(document, PaginationQuery).ToList();
-            var parsed = int.TryParse(pagination[^3], out int maxPage);
+            var pagination = _parser.QueryTexts(document, Selectors.Pagination)?.ToList() ?? [];
 
-            _logger.LogInformation("Found {PageQuantity} pages to scrape", parsed);
+            var maxPage = PaginationExtractor.GetMaxPage(pagination);
 
-            return parsed ? maxPage : 1;
+            _logger.LogInformation("Detected {PageQuantity} pages from pagination", maxPage);
+
+            return maxPage;
         }
 
         private List<string> GetNewsIfExists(string document)
         {
-            var noticias = _parser.QueryTexts(document, NewsQuery).ToList();
+            var noticias = _parser.QueryTexts(document, Selectors.News).ToList();
 
             _logger.LogInformation("Found {NewsCount} news", noticias.Count);
 
@@ -65,7 +67,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
         private async Task<List<string>> GetNewsFromPagination(string term, int maxPage)
         {
             List<string> newsRaw = [];
-            for (var i = 0; i <= maxPage; i++)
+            for (var i = 2; i <= maxPage; i++)
             {
                 var html = await _fetcher.GetStringAsync($"{BaseUrl}/page/{i}/?s={term}");
                 var news = GetNewsIfExists(html);
@@ -73,27 +75,6 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
                     newsRaw.AddRange(news);
             }
             return newsRaw;
-        }
-
-        private List<Noticia> BuildResponseData(List<string> news)
-        {
-            List<Noticia> formattedNews = [];
-            foreach (var item in news)
-            {
-                var rawDate = _parser.QueryText(item, DateQuery);
-                DateTime.TryParseExact(rawDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date);
-                formattedNews.Add(
-                    new Noticia(
-                        title: _parser.QueryText(item, TitleQuery) ?? "No title",
-                        dateTime: date,
-                        year: date.Year,
-                        link: _parser.QueryText(item, LinkQuery) ?? "No link",
-                        @abstract: _parser.QueryText(item, AbstractQuery),
-                        source: Name
-                    )
-                );
-            }
-            return formattedNews;
         }
     }
 }

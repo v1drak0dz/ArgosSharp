@@ -7,14 +7,14 @@ using Moq;
 
 namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
 {
-    public class CaraguatatubaScraperUnitTests
+    public class UbatubaScraperTests
     {
         private Mock<IHttpFetcher> _fetcherMock;
         private Mock<IHtmlParser> _parserMock;
-        private Mock<ILogger<CaraguatatubaScraper>> _loggerMock;
+        private Mock<ILogger<UbatubaScraper>> _loggerMock;
         private MockRepository _mockRepository;
 
-        private CaraguatatubaScraper _scraper;
+        private UbatubaScraper _scraper;
 
         private const string Html = "<html>";
         private const string NewsHtml = "<news>";
@@ -25,19 +25,19 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             _mockRepository = new MockRepository(MockBehavior.Strict);
             _fetcherMock = _mockRepository.Create<IHttpFetcher>();
             _parserMock = _mockRepository.Create<IHtmlParser>();
-            _loggerMock = _mockRepository.Create<ILogger<CaraguatatubaScraper>>();
+            _loggerMock = _mockRepository.Create<ILogger<UbatubaScraper>>();
 
             _loggerMock.Setup(x => x.Log(
                 It.IsAny<LogLevel>(),
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
-                It.IsAny<Exception>(), 
+                It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
-            _scraper = new CaraguatatubaScraper(
+            _scraper = new UbatubaScraper(
+                _loggerMock.Object,
                 _fetcherMock.Object,
-                _parserMock.Object,
-                _loggerMock.Object
+                _parserMock.Object
             );
         }
 
@@ -47,28 +47,28 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             _mockRepository.VerifyAll();
         }
 
-        private void SetupFetcher(params string[] urls)
+        private void SetupFetcher()
         {
             _fetcherMock
                 .Setup(x => x.GetStringAsync(It.IsAny<string>()))
                 .ReturnsAsync(Html);
         }
 
-        private void SetupNewsExtraction(params string[] news)
-        {
-            _parserMock
-                .Setup(x => x.QueryTexts(Html, It.Is<string>(s => s.Contains("latestNews"))))
-                .Returns(news.ToList());
-        }
-
         private void SetupPagination(params string[] pages)
         {
             _parserMock
-                .Setup(x => x.QueryTexts(Html, It.Is<string>(s => s.Contains("pagination"))))
+                .Setup(x => x.QueryTexts(Html, It.Is<string>(s => s.Contains("pagenavi"))))
                 .Returns(pages.ToList());
         }
 
-        private void SetupDefaultMapping(string newsItem = NewsHtml)
+        private void SetupNews(params string[] news)
+        {
+            _parserMock
+                .Setup(x => x.QueryTexts(Html, It.Is<string>(s => s.Contains("blog-items"))))
+                .Returns(news.ToList());
+        }
+
+        private void SetupMapping(string newsItem = NewsHtml)
         {
             _parserMock
                 .Setup(x => x.QueryText(newsItem, It.IsAny<string>()))
@@ -76,10 +76,10 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
                 {
                     return selector switch
                     {
-                        var s when s.Contains("created-at") => "01/01/2024",
+                        var s when s.Contains("time") => "01/01/2024",
                         var s when s.Contains("a::text") => "Title test",
                         var s when s.Contains("href") => "http://link.com",
-                        var s when s.Contains("news-text") => "Summary",
+                        var s when s.Contains("excerpt") => "Summary",
                         _ => null
                     };
                 });
@@ -90,9 +90,9 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         {
             // Arrange
             SetupFetcher();
-            SetupPagination("1", "2", "3", "4", "5");
-            SetupNewsExtraction(NewsHtml);
-            SetupDefaultMapping();
+            SetupPagination("1", "2", "3");
+            SetupNews(NewsHtml);
+            SetupMapping();
 
             // Act
             var result = await _scraper.ProcessScraperAsync("test", 1);
@@ -104,12 +104,12 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         }
 
         [Test]
-        public async Task ProcessScraperAsync_WhenNoPagination_ShouldReturnDefaultSinglePage()
+        public async Task ProcessScraperAsync_WhenNoPagination_ShouldReturnEmpty()
         {
             // Arrange
             SetupFetcher();
             SetupPagination();
-            SetupNewsExtraction();
+            SetupNews();
 
             // Act
             var result = await _scraper.ProcessScraperAsync("test", 1);
@@ -123,17 +123,17 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         {
             // Arrange
             SetupFetcher();
-            SetupPagination("1", "2", "3", "4", "5");
-            SetupNewsExtraction(NewsHtml);
-            SetupDefaultMapping();
+            SetupPagination("1", "2", "3");
+            SetupNews(NewsHtml);
+            SetupMapping();
 
             // Act
-            await _scraper.ProcessScraperAsync("test", 2);
+            await _scraper.ProcessScraperAsync("test", 3);
 
             // Assert
             _fetcherMock.Verify(
-                x => x.GetStringAsync(It.Is<string>(url => url.Contains("page"))),
-                Times.AtLeastOnce);
+                x => x.GetStringAsync(It.Is<string>(url => url.Contains("/page/2"))),
+                Times.Once);
         }
 
         [Test]
@@ -141,16 +141,16 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         {
             // Arrange
             SetupFetcher();
-            SetupPagination("1", "2", "3", "4", "5");
-            SetupNewsExtraction();
+            SetupPagination("1", "2", "3", "4");
+            SetupNews();
 
             // Act
             await _scraper.ProcessScraperAsync("test", 1);
 
             // Assert
             _fetcherMock.Verify(
-                x => x.GetStringAsync(It.Is<string>(url => url.Contains("page"))),
-                Times.AtMost(1));
+                x => x.GetStringAsync(It.Is<string>(url => url.Contains("/page/"))),
+                Times.Never);
         }
 
         [Test]
@@ -159,7 +159,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             // Arrange
             SetupFetcher();
             SetupPagination("1", "2", "3");
-            SetupNewsExtraction();
+            SetupNews();
 
             // Act
             var result = await _scraper.ProcessScraperAsync("test", 1);
@@ -174,15 +174,11 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             // Arrange
             SetupFetcher();
             SetupPagination("1", "2", "3");
-
-            SetupNewsExtraction(NewsHtml);
+            SetupNews(NewsHtml);
 
             _parserMock
                 .Setup(x => x.QueryText(NewsHtml, It.IsAny<string>()))
-                .Returns((string _, string selector) =>
-                {
-                    return selector.Contains("created-at") ? "01/01/2024" : null;
-                });
+                .Returns((string _, string selector) => selector.Contains("time") ? "01/01/2024" : null);
 
             // Act
             var result = await _scraper.ProcessScraperAsync("test", 1);
@@ -198,7 +194,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
             // Arrange
             SetupFetcher();
             SetupPagination("1", "2", "3");
-            SetupNewsExtraction(NewsHtml);
+            SetupNews(NewsHtml);
 
             _parserMock
                 .Setup(x => x.QueryText(NewsHtml, It.IsAny<string>()))
