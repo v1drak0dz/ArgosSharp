@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using ArgosSharp.Application.StrategiesContext.Scraper;
 using ArgosSharp.Application.Interfaces.Strategies;
-using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
 using Moq;
 
@@ -43,7 +42,7 @@ namespace ArgosSharp.Application.UnitTests.StrategiesContext
         {
             // Act
             var result = await scraperStrategyContext.GetNoticiasBySourceAsync(
-                ScraperSourceEnum.ValidTestSource, SearchTerm, Depth);
+                "ValidTestSource", SearchTerm, Depth);
 
             // Assert
             result.Should().NotBeEmpty();
@@ -55,7 +54,7 @@ namespace ArgosSharp.Application.UnitTests.StrategiesContext
         {
             // Act
             Func<Task> act = async () =>
-                await scraperStrategyContext.GetNoticiasBySourceAsync(ScraperSourceEnum.InvalidTestSource, SearchTerm, Depth);
+                await scraperStrategyContext.GetNoticiasBySourceAsync("invalid", SearchTerm, Depth);
 
             // Assert
             act.Should().ThrowAsync<Exception>()

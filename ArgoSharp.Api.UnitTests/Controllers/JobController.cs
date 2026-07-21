@@ -1,8 +1,7 @@
 ﻿using ArgosSharp.Api.Controllers;
 using ArgosSharp.Api.DTOs.Job;
 using ArgosSharp.Api.DTOs.Job.CreateJob;
-using ArgosSharp.Api.Mappers.JobMapper;
-using ArgosSharp.Application.Services.JobQueue;
+using ArgosSharp.Application.UseCase.CreateJob;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
 using FluentAssertions;
@@ -14,35 +13,31 @@ namespace ArgoSharp.Api.UnitTests.Controllers
     public class JobControllerTests
     {
         private MockRepository mockRepository;
-        private Mock<IJobQueue> jobQueueMock;
-        private Mock<IJobMapper> jobMapperMock;
+        private Mock<ICreateJobUseCase> createJobMock;
         private JobsController jobsController;
-        private CreateJobRequest sampleJob;
         private Job jobObject;
 
         [SetUp]
         public void Setup()
         {
             mockRepository = new MockRepository(MockBehavior.Strict);
-            jobQueueMock = mockRepository.Create<IJobQueue>();
-            jobMapperMock = mockRepository.Create<IJobMapper>();
+            createJobMock = mockRepository.Create<ICreateJobUseCase>();
 
-            sampleJob = new CreateJobRequest
-            {
-                SearchTerm = "Test",
-                Parameters = new CreateJobParametersRequest { Depth = 1, Sites = ["Caraguatatuba"] }
-            };
-            jobObject = new Job("Test", new JobParameters([ScraperSourceEnum.Caraguatatuba], 1), JobStatusEnum.Created);
+            jobObject = new Job("Test", new JobParameters(["caraguatatuba"], 1), JobStatusEnum.Created);
+            createJobMock.Setup(x => x.CreateJob("Test", new List<string> { "Caraguatatuba" }, 1)).ReturnsAsync(jobObject);
 
-            jobMapperMock.Setup(x => x.JobFromRequest(It.Is<CreateJobRequest>(x => x.Equals(sampleJob)))).Returns(jobObject);
-            jobsController = new JobsController(jobQueueMock.Object, jobMapperMock.Object);
+            jobsController = new JobsController(createJobMock.Object);
         }
 
         [Test]
         public async Task CreateJobAsync_WhenValidJob_ShouldReturnOk()
         {
             // Arrange
-            jobQueueMock.Setup(x => x.EnqueueAsync(It.IsAny<Job>())).Returns(Task.CompletedTask);
+            var sampleJob = new CreateJobRequest
+            {
+                SearchTerm = "Test",
+                Parameters = new CreateJobParametersRequest { Depth = 1, Sites = ["Caraguatatuba"] }
+            };
 
             // Act
             var result = await jobsController.CreateJobAsync(sampleJob);
@@ -61,7 +56,11 @@ namespace ArgoSharp.Api.UnitTests.Controllers
         public async Task CreateJobAsync_WhenInvalidJob_ShouldReturnNotFound()
         {
             // Arrange
-            jobQueueMock.Setup(x => x.EnqueueAsync(It.IsAny<Job>())).Throws(new Exception());
+            var sampleJob = new CreateJobRequest
+            {
+                SearchTerm = "Test",
+                Parameters = new CreateJobParametersRequest { Depth = 1, Sites = ["NotValidOption"] }
+            };
 
             // Act
             var result = await jobsController.CreateJobAsync(sampleJob);

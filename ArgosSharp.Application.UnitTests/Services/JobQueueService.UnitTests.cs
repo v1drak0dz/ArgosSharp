@@ -34,7 +34,8 @@ namespace ArgosSharp.Application.UnitTests.Services
             var job = _jobFactory.Create
             (
                 searchTerm: "Teste",
-                parameters: new JobParameters(depth: 1, sites: [ScraperSourceEnum.Caraguatatuba])
+                depth: 1,
+                sites: ["caraguatatuba"]
             );
 
             // Act
@@ -52,7 +53,8 @@ namespace ArgosSharp.Application.UnitTests.Services
             var job = _jobFactory.Create
             (
                 searchTerm: "Teste",
-                parameters: new JobParameters(depth: 1, sites: [ScraperSourceEnum.Caraguatatuba])
+                depth: 1,
+                sites: ["caraguatatuba"]
             );
 
             // Act

@@ -1,12 +1,22 @@
 ﻿using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Domain.ValueObjects;
 using System.Globalization;
-using System.Xml.Linq;
 
 namespace ArgosSharp.Infrastructure.Mapper
 {
     public static class NoticiaMapper
     {
+        /// <summary>
+        /// Maps HTML content to a Noticia object by extracting relevant fields using the provided
+        /// HTML parser and CSS selectors. Parses the date field in "dd/MM/yyyy" format and extracts
+        /// title, date, link, abstract, and source. Missing title defaults to "No title" and
+        /// missing link defaults to "No link".
+        /// </summary>
+        /// <param name="html">The HTML content to map.</param>
+        /// <param name="parser">The HTML parser to use for extracting text content.</param>
+        /// <param name="selectors">The CSS selectors configuration for extracting specific fields.</param>
+        /// <param name="source">The source identifier to associate with the news item.</param>
+        /// <returns>A new <see cref="Noticia"/> instance populated from the parsed HTML.</returns>
         public static Noticia Map(
             string html,
             IHtmlParser parser,

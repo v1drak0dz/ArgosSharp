@@ -7,11 +7,13 @@ namespace ArgosSharp.Application.Services.JobQueue
     {
         private readonly Channel<Job> queue = Channel.CreateUnbounded<Job>();
 
+        /// <inheritdoc cref="IJobQueue"/>
         public async Task EnqueueAsync(Job job)
         {
             await queue.Writer.WriteAsync(job);
         }
 
+        /// <inheritdoc cref="IJobQueue"/>
         public async Task<Job> DequeueAsync(CancellationToken cancellationToken)
         {
             return await queue.Reader.ReadAsync(cancellationToken);

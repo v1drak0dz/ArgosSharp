@@ -1,5 +1,5 @@
 using ArgosSharp.Api;
-using ArgosSharp.Application.Services.JobStore;
+using ArgosSharp.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,7 @@ builder.Services.AddInfrastructure();
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
-var store = scope.ServiceProvider.GetRequiredService<IJobStore>();
+var store = scope.ServiceProvider.GetRequiredService<JobUnitOfWork>();
 await store.InitializeAsync();
 
 // Configure the HTTP request pipeline.
