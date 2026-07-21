@@ -1,4 +1,5 @@
 using ArgosSharp.Api;
+using ArgosSharp.Api.DependeciesInjection;
 using ArgosSharp.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+#region [Dependecies Injection]
+
 builder.Services.AddInfrastructure();
+builder.Services.AddValidators();
+
+#endregion [Dependencies Injection]
 
 var app = builder.Build();
 

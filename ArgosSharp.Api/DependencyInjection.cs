@@ -1,4 +1,5 @@
-﻿using ArgosSharp.Application.Interfaces.Fetcher;
+﻿using ArgosSharp.Api.Validators;
+using ArgosSharp.Application.Interfaces.Fetcher;
 using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Application.Interfaces.Persistence;
 using ArgosSharp.Application.Interfaces.Repositories;

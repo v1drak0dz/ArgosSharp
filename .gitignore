@@ -364,3 +364,6 @@ FodyWeavers.xsd
 .vscode
 TestResult
 coverage
+/api
+/docs
+/_site
