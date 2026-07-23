@@ -13,10 +13,10 @@ namespace ArgosSharp.Api.UnitTests.Validators
         public void Setup()
             => _validator = new CreateJobValidator();
 
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("   ")]
+        [TestCase(null, TestName = "Test that the SearchTerm validation rule is triggered when the SearchTerm is null.")]
+        [TestCase("", TestName = "Test that the SearchTerm validation rule is triggered when the SearchTerm is empty.")]
+        [TestCase(" ", TestName = "Test that the SearchTerm validation rule is triggered when the SearchTerm is whitespace.")]
+        [TestCase("  ", TestName = "Test that the SearchTerm validation rule is triggered when the SearchTerm is whitespace.")]
         public void SearchTermRule_WhenSearchTermIsNullEmptyOrWhitespace_ShouldHaveValidationError(
             string? searchTerm)
         {
@@ -38,7 +38,7 @@ namespace ArgosSharp.Api.UnitTests.Validators
                 && error.ErrorMessage == "SearchTerm is required.");
         }
 
-        [Test]
+        [Test(Description = "Test that the Parameters validation rule is triggered when the Parameters is null.")]
         public void ParametersRule_WhenParametersIsNull_ShouldHaveValidationError()
         {
             // Arrange
@@ -59,7 +59,7 @@ namespace ArgosSharp.Api.UnitTests.Validators
                 && error.ErrorMessage == "Parameters are required.");
         }
 
-        [Test]
+        [Test(Description = "Test that both SearchTerm and Parameters validation rules are triggered when both are invalid.")]
         public void SearchTermAndParametersRules_WhenBothAreInvalid_ShouldHaveValidationErrors()
         {
             // Arrange
@@ -86,7 +86,7 @@ namespace ArgosSharp.Api.UnitTests.Validators
                 && error.ErrorMessage == "Parameters are required.");
         }
 
-        [Test]
+        [Test(Description = "Test that all validation rules pass when valid parameters are provided.")]
         public void CreateJobRules_WhenRequestIsValid_ShouldNotHaveValidationErrors()
         {
             // Arrange

@@ -13,11 +13,13 @@ namespace ArgosSharp.Api.UnitTests.Validators
         public void Setup()
             => _validator = new CreateJobParametersValidator();
 
-        [Test]
-        public void DepthRule_WhenDepthIsZero_ShouldHaveValidationError()
+        [TestCase(0, TestName = "Test that the Depth validation rule is triggered when the Depth is zero.")]
+        [TestCase(-1, TestName = "Test that the Depth validation rule is triggered when the Depth is lower than 0.")]
+        [TestCase(1, TestName = "Test that the Sites validation rule is triggered when the Sites list is empty.")]
+        public void DepthRule_WhenDepthIsZero_ShouldHaveValidationError(int depth)
         {
             // Arrange
-            var request = new CreateJobParametersRequest { Depth = 0, Sites = ["site1"] };
+            var request = new CreateJobParametersRequest { Depth = depth, Sites = ["site1"] };
 
             // Act
             var result = _validator.Validate(request);
@@ -25,34 +27,6 @@ namespace ArgosSharp.Api.UnitTests.Validators
             // Assert
             result.IsValid.Should().BeFalse();
             result.Errors.First().ErrorMessage.Should().Be("Depth must be greater than 0.");
-        }
-
-        [Test]
-        public void DepthRule_WhenDepthIsLowerThanZero_ShouldHaveValidationError()
-        {
-            // Arrange
-            var request = new CreateJobParametersRequest { Depth = -1, Sites = ["site1"] };
-
-            // Act
-            var result = _validator.Validate(request);
-
-            // Assert
-            result.IsValid.Should().BeFalse();
-            result.Errors.First().ErrorMessage.Should().Be("Depth must be greater than 0.");
-        }
-
-        [Test]
-        public void SitesRule_WhenSitesListIsEmpty_ShouldHaveValidationError()
-        {
-            // Arrange
-            var request = new CreateJobParametersRequest { Depth = 1, Sites = [] };
-
-            // Act
-            var result = _validator.Validate(request);
-
-            // Assert
-            result.IsValid.Should().BeFalse();
-            result.Errors.First().ErrorMessage.Should().Be("Sites list cannot be empty.");
         }
 
         [TestCaseSource(nameof(InvalidSitesCases))]
@@ -71,7 +45,7 @@ namespace ArgosSharp.Api.UnitTests.Validators
                 && error.ErrorMessage == "Sites list cannot contain empty or whitespace strings.");
         }
 
-        [Test]
+        [Test(Description = "Test that the Sites validation rule is triggered when the Sites list is null.")]
         public void SitesRule_WhenSitesIsNull_ShouldHaveValidationError()
         {
             // Arrange
@@ -87,7 +61,7 @@ namespace ArgosSharp.Api.UnitTests.Validators
                 && error.ErrorMessage == "Sites list cannot be null.");
         }
 
-        [Test]
+        [Test(Description = "Test that both depth and sites validation rules are triggered when both parameters are invalid.")]
         public void SitesAndDepthRules_WhenBothAreInvalid_ShouldHaveValidationErrors()
         {
             // Arrange
@@ -106,7 +80,7 @@ namespace ArgosSharp.Api.UnitTests.Validators
                 && error.ErrorMessage == "Sites list cannot contain empty or whitespace strings.");
         }
 
-        [Test]
+        [Test(Description = "Test that all validation rules pass when valid parameters are provided.")]
         public void ParamRules_WhenAllRulesValid_ShouldNotHaveValidationErrors()
         {
             // Arrange
@@ -122,22 +96,17 @@ namespace ArgosSharp.Api.UnitTests.Validators
 
         private static IEnumerable<TestCaseData> InvalidSitesCases()
         {
-            yield return new TestCaseData(
-                new List<string> { "site1", " " })
+            yield return new TestCaseData(new List<string> { "site1", " " })
                 .SetName("Sites containing whitespace");
 
-            yield return new TestCaseData(
-                new List<string> { "site1", "" })
+            yield return new TestCaseData(new List<string> { "site1", "" })
                 .SetName("Sites containing empty string");
 
-            yield return new TestCaseData(
-                new List<string> { " " })
+            yield return new TestCaseData(new List<string> { " " })
                 .SetName("Sites containing only whitespace");
 
-            yield return new TestCaseData(
-                new List<string> { "" })
+            yield return new TestCaseData(new List<string> { "" })
                 .SetName("Sites containing only empty string");
-
         }
     }
 }

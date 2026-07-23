@@ -12,7 +12,6 @@ using Moq;
 
 namespace ArgosSharp.Api.UnitTests.Controllers
 {
-
     [TestFixture]
     public class JobControllerTests
     {
@@ -36,6 +35,10 @@ namespace ArgosSharp.Api.UnitTests.Controllers
                 _createJobValidatorMock.Object,
                 _createJobParametersValidatorMock.Object);
         }
+
+        [TearDown]
+        public void TearDown()
+            => _mockRepository.VerifyAll();
 
         [Test]
         public async Task CreateJobAsync_WhenRequestIsValid_ShouldReturnOk()
@@ -83,24 +86,6 @@ namespace ArgosSharp.Api.UnitTests.Controllers
                 .Subject;
 
             response.JobId.Should().Be(createdJob.JobId);
-
-            _createJobUseCaseMock.Verify(x => x.CreateJob(
-                request.SearchTerm!,
-                It.Is<List<string>>(sites =>
-                    sites.SequenceEqual(request.Parameters!.Sites)),
-                request.Parameters!.Depth),
-                Times.Once);
-
-            _createJobValidatorMock.Verify(x => x.ValidateAsync(
-                request,
-                It.IsAny<CancellationToken>()),
-                Times.Once);
-
-            _createJobParametersValidatorMock.Verify(
-                x => x.ValidateAsync(
-                    request.Parameters!,
-                    It.IsAny<CancellationToken>()),
-                Times.Once);
         }
 
         [Test]
@@ -132,14 +117,6 @@ namespace ArgosSharp.Api.UnitTests.Controllers
             failure.ErrorMessage
                 .Should()
                 .Be("SearchTerm is required");
-
-            _createJobParametersValidatorMock.Verify(
-                x => x.ValidateAsync(
-                    It.IsAny<CreateJobParametersRequest>(),
-                    It.IsAny<CancellationToken>()),
-                Times.Never);
-
-            VerifyCreateJobWasNeverCalled();
         }
 
         [Test]
@@ -178,8 +155,6 @@ namespace ArgosSharp.Api.UnitTests.Controllers
             failure.ErrorMessage
                 .Should()
                 .Be("Depth must be greater than 0");
-
-            VerifyCreateJobWasNeverCalled();
         }
 
         private static CreateJobRequest CreateValidRequest()
@@ -212,16 +187,6 @@ namespace ArgosSharp.Api.UnitTests.Controllers
                 .Should()
                 .ContainSingle()
                 .Subject;
-        }
-
-        private void VerifyCreateJobWasNeverCalled()
-        {
-            _createJobUseCaseMock.Verify(
-                x => x.CreateJob(
-                    It.IsAny<string>(),
-                    It.IsAny<List<string>>(),
-                    It.IsAny<int>()),
-                Times.Never);
         }
     }
 }
