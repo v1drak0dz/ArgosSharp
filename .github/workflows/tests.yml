@@ -16,11 +16,5 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Restore
-        run: dotnet restore ArgosSharp.sln
-
-      - name: Build
-        run: dotnet build ArgosSharp.sln --configuration Release --no-restore
-
       - name: Test
-        run: dotnet test ArgosSharp.sln --configuration Release --no-build
+        run: dotnet test
