@@ -17,10 +17,10 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore ArgosSharp.sln
 
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build ArgosSharp.sln --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test --no-build --configuration Release
+        run: dotnet test ArgosSharp.sln --configuration Release --no-build
