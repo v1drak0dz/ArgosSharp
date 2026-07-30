@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 
 #region [Dependecies Injection]
 
+builder.Services.AddMiddlewareDependencies();
 builder.Services.AddInfrastructure();
 builder.Services.AddJobDependencies();
 builder.Services.AddValidators();

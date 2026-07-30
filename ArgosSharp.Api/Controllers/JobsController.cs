@@ -3,16 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using ArgosSharp.Api.DTOs.Job.CreateJob;
 using ArgosSharp.Application.UseCase.CreateJob;
 using FluentValidation;
-using ArgosSharp.Api.Validators;
 
 namespace ArgosSharp.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class JobsController(ICreateJobUseCase createJobUseCase, IValidator<CreateJobRequest> createJobValidator, IValidator<CreateJobParametersRequest> createJobParamsValidator) : ControllerBase
+    internal class JobsController(ICreateJobUseCase createJobUseCase, IValidator<CreateJobRequest> createJobValidator, IValidator<CreateJobParametersRequest> createJobParamsValidator) : ControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<JobResponseDTO>> CreateJobAsync([FromBody] CreateJobRequest createJobDto)
+        internal async Task<ActionResult<JobResponseDTO>> CreateJobAsync([FromBody] CreateJobRequest createJobDto)
         {
             var validationResult = await createJobValidator.ValidateAsync(createJobDto);
             if (!validationResult.IsValid)

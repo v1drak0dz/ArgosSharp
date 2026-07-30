@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace ArgosSharp.Api.Validators
 {
-    public class CreateJobParametersValidator : AbstractValidator<CreateJobParametersRequest>
+    internal class CreateJobParametersValidator : AbstractValidator<CreateJobParametersRequest>
     {
-        public CreateJobParametersValidator()
+        internal CreateJobParametersValidator()
         {
             RuleFor(x => x.Depth)
                 .GreaterThan(0).WithMessage("Depth must be greater than 0.");

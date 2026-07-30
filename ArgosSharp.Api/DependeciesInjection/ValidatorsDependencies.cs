@@ -4,9 +4,9 @@ using ArgosSharp.Api.Validators;
 
 namespace ArgosSharp.Api.DependeciesInjection
 {
-    public static class ValidatorsDependencies
+    internal static class ValidatorsDependencies
     {
-        public static IServiceCollection AddValidators(this IServiceCollection services)
+        internal static IServiceCollection AddValidators(this IServiceCollection services)
         {
             services.AddValidatorsFromAssemblyContaining<CreateJobValidator>();
             services.AddValidatorsFromAssemblyContaining<CreateJobParametersValidator>();
