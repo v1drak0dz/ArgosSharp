@@ -26,7 +26,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
             Link = "h2 > a::attr(href)"
         };
 
-        public async Task<List<Noticia>> ProcessScraperAsync(string searchTerm, int depth)
+        public async Task<List<News>> ProcessScraperAsync(string searchTerm, int depth)
         {
             var news = new List<string>();
             var termParsed = WebUtility.UrlEncode(searchTerm);
@@ -40,7 +40,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
             news.AddRange(GetNewsIfExists(html));
             news.AddRange(await GetNewsFromPagination(termParsed, limit));
 
-            return [.. news.Select(x => NoticiaMapper.Map(x, _parser, Selectors, Name))];
+            return [.. news.Select(x => NewsMapper.Map(x, _parser, Selectors, Name))];
         }
 
         private int GetPaginationIfExists(string html)
@@ -56,11 +56,11 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
 
         private List<string> GetNewsIfExists(string document)
         {
-            var noticias = _parser.QueryTexts(document, Selectors.News).ToList();
+            var news = _parser.QueryTexts(document, Selectors.News).ToList();
 
-            _logger.LogInformation("Found {NewsCount} news", noticias.Count);
+            _logger.LogInformation("Found {NewsCount} news", news.Count);
             
-            return noticias;
+            return news;
         }
 
         private async Task<List<string>> GetNewsFromPagination(string term, int maxPage)

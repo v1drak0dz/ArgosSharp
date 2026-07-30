@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace ArgosSharp.Infrastructure.Mapper
 {
-    public static class NoticiaMapper
+    public static class NewsMapper
     {
         /// <summary>
         /// Maps HTML content to a Noticia object by extracting relevant fields using the provided
@@ -16,8 +16,8 @@ namespace ArgosSharp.Infrastructure.Mapper
         /// <param name="parser">The HTML parser to use for extracting text content.</param>
         /// <param name="selectors">The CSS selectors configuration for extracting specific fields.</param>
         /// <param name="source">The source identifier to associate with the news item.</param>
-        /// <returns>A new <see cref="Noticia"/> instance populated from the parsed HTML.</returns>
-        public static Noticia Map(
+        /// <returns>A new <see cref="News"/> instance populated from the parsed HTML.</returns>
+        public static News Map(
             string html,
             IHtmlParser parser,
             ScraperSelectors selectors,
@@ -26,7 +26,7 @@ namespace ArgosSharp.Infrastructure.Mapper
         {
             var rawDate = parser.QueryText(html, selectors.Date);
             DateTime.TryParseExact(rawDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date);
-            return new Noticia(
+            return new News(
                 title: parser.QueryText(html, selectors.Title) ?? "No title",
                 dateTime: date,
                 year: date.Year,

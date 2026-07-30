@@ -12,7 +12,7 @@ namespace ArgosSharp.Application.StrategiesContext.Scraper
             _strategies = strategies.ToDictionary(s => s.Name);
 
         /// <inheritdoc cref="IScraperStrategyContext"/>
-        public async Task<List<Noticia>> GetNoticiasBySourceAsync(string scraperSource, string searchTerm, int depth) =>
+        public async Task<List<News>> GetNewsBySourceAsync(string scraperSource, string searchTerm, int depth) =>
             await _strategies[scraperSource].ProcessScraperAsync(searchTerm, depth);
     }
 }

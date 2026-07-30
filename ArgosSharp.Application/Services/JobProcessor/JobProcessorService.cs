@@ -18,7 +18,7 @@ namespace ArgosSharp.Application.Services.JobProcessor
                 var sources = job.Parameters.Sites.AsEnumerable();
                 var depth = job.Parameters.Depth;
 
-                var data = await scraperProcessor.GetNoticias(job.SearchTerm, depth, sources);
+                var data = await scraperProcessor.GetNews(job.SearchTerm, depth, sources);
 
                 job.Data = data;
 

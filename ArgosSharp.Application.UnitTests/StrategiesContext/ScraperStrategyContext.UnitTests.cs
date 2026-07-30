@@ -33,15 +33,15 @@ namespace ArgosSharp.Application.UnitTests.StrategiesContext
             validStrategyMock.SetupProperty(x => x.Name, "ValidTestSource");
             validStrategyMock.Setup(x =>
                     x.ProcessScraperAsync(It.Is<string>(x => x.Equals(SearchTerm)), It.Is<int>(x => x.Equals(Depth))))
-                .ReturnsAsync([CreateNoticia(ValidResultTitle)]);
+                .ReturnsAsync([CreateNews(ValidResultTitle)]);
             scraperStrategyContext = new ScraperStrategyContext([scraperStrategyMock.Object, validStrategyMock.Object]);
         }
 
         [Test]
-        public async Task GetNoticiasBySourceAsync_ShouldReturnResults_FromMatchingScraper()
+        public async Task GetNewsBySourceAsync_ShouldReturnResults_FromMatchingScraper()
         {
             // Act
-            var result = await scraperStrategyContext.GetNoticiasBySourceAsync(
+            var result = await scraperStrategyContext.GetNewsBySourceAsync(
                 "ValidTestSource", SearchTerm, Depth);
 
             // Assert
@@ -50,18 +50,18 @@ namespace ArgosSharp.Application.UnitTests.StrategiesContext
         }
 
         [Test]
-        public void GetNoticiasBySourceAsync_ShouldThrow_WhenNoScraperFound()
+        public void GetNewsBySourceAsync_ShouldThrow_WhenNoScraperFound()
         {
             // Act
             Func<Task> act = async () =>
-                await scraperStrategyContext.GetNoticiasBySourceAsync("invalid", SearchTerm, Depth);
+                await scraperStrategyContext.GetNewsBySourceAsync("invalid", SearchTerm, Depth);
 
             // Assert
             act.Should().ThrowAsync<Exception>()
                .WithMessage(ExceptionMessage);
         }
 
-        private Noticia CreateNoticia(string title) =>
+        private static News CreateNews(string title) =>
             new(title, DateTime.Now, DateTime.Now.Year, "some link", "Some abstract", "Source");
     }
 }

@@ -6,6 +6,6 @@ namespace ArgosSharp.Application.Interfaces.Strategies
     {
         string Name { get; set; }
 
-        Task<List<Noticia>> ProcessScraperAsync(string searchTerm, int depth);
+        Task<List<News>> ProcessScraperAsync(string searchTerm, int depth);
     }
 }
