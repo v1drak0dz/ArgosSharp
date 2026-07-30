@@ -86,7 +86,7 @@ namespace ArgosSharp.Infrastructure.UnitTests.Strategies.Scrapers
         }
 
         [Test]
-        public async Task ProcessScraperAsync_ShouldReturnFormattedNoticias()
+        public async Task ProcessScraperAsync_ShouldReturnFormattedNews()
         {
             // Arrange
             SetupFetcher();

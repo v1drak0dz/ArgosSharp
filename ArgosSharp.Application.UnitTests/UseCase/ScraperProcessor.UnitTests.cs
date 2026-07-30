@@ -19,52 +19,52 @@ namespace ArgosSharp.Application.UnitTests.UseCase
         }
 
         [Test]
-        public void GetNoticias_ShouldThrow_WhenSearchTermIsNullOrEmpty()
+        public void GetNews_ShouldThrow_WhenSearchTermIsNullOrEmpty()
         {
-            Func<Task> act = async () => await _processor.GetNoticias("", 1, ["Caraguatatuba"]);
+            Func<Task> act = async () => await _processor.GetNews("", 1, ["Caraguatatuba"]);
             act.Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Test]
-        public void GetNoticias_ShouldThrow_WhenDepthIsNegative()
+        public void GetNews_ShouldThrow_WhenDepthIsNegative()
         {
-            Func<Task> act = async () => await _processor.GetNoticias("teste", -1, ["Caraguatatuba"]);
+            Func<Task> act = async () => await _processor.GetNews("teste", -1, ["Caraguatatuba"]);
             act.Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Test]
-        public async Task GetNoticias_ShouldCallContext_ForEachSource()
+        public async Task GetNews_ShouldCallContext_ForEachSource()
         {
             // Arrange
             var sources = new[] { "Caraguatatuba", "Ubatuba" };
 
             _contextMock
-                .Setup(c => c.GetNoticiasBySourceAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Setup(c => c.GetNewsBySourceAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync((string src, string term, int depth) =>
                 [
                     CreateFakeResult(src)
                 ]);
 
             // Act
-            var result = await _processor.GetNoticias("teste", 1, sources);
+            var result = await _processor.GetNews("teste", 1, sources);
 
             // Assert
             result.Should().HaveCount(2);
             result[0].Title.Should().Contain("Caraguatatuba");
             result[1].Title.Should().Contain("Ubatuba");
 
-            _contextMock.Verify(c => c.GetNoticiasBySourceAsync("Caraguatatuba", "teste", 1), Times.Once);
-            _contextMock.Verify(c => c.GetNoticiasBySourceAsync("Ubatuba", "teste", 1), Times.Once);
+            _contextMock.Verify(c => c.GetNewsBySourceAsync("Caraguatatuba", "teste", 1), Times.Once);
+            _contextMock.Verify(c => c.GetNewsBySourceAsync("Ubatuba", "teste", 1), Times.Once);
         }
 
         [Test]
-        public async Task GetNoticias_ShouldReturnEmptyList_WhenNoSources()
+        public async Task GetNews_ShouldReturnEmptyList_WhenNoSources()
         {
-            var result = await _processor.GetNoticias("teste", 1, []);
+            var result = await _processor.GetNews("teste", 1, []);
             result.Should().BeEmpty();
         }
 
-        private static Noticia CreateFakeResult(string source) =>
+        private static News CreateFakeResult(string source) =>
             new($"Fake result for {source}", DateTime.Now, DateTime.Now.Year, "Some link", "Some abstract", source);
     }
 }

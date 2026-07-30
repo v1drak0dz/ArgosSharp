@@ -44,10 +44,10 @@ namespace ArgosSharp.Application.UnitTests.Services
                 sites: ["caraguatatuba", "ubatuba"]
             );
 
-            var fakeData = new List<Noticia> { CreateNoticia("News 1"), CreateNoticia("News 2") };
+            var fakeData = new List<News> { CreateNews("News 1"), CreateNews("News 2") };
 
             _scraperProcessorMock
-                .Setup(x => x.GetNoticias(job.SearchTerm, job.Parameters.Depth, job.Parameters.Sites))
+                .Setup(x => x.GetNews(job.SearchTerm, job.Parameters.Depth, job.Parameters.Sites))
                 .ReturnsAsync(fakeData);
             _jobUnitOfWork
                 .Setup(x => x.UpdateJobStatus(job, JobStatusEnum.Processing))
@@ -79,7 +79,7 @@ namespace ArgosSharp.Application.UnitTests.Services
             );
 
             _scraperProcessorMock
-                .Setup(x => x.GetNoticias(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<IEnumerable<string>>()))
+                .Setup(x => x.GetNews(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<IEnumerable<string>>()))
                 .ThrowsAsync(new InvalidOperationException("Simulated Error"));
             _jobUnitOfWork
                 .Setup(x => x.UpdateJobStatus(job, JobStatusEnum.Processing))
@@ -100,9 +100,9 @@ namespace ArgosSharp.Application.UnitTests.Services
             _jobUnitOfWork.Verify(x => x.UpdateJobStatus(job, JobStatusEnum.Failed), Times.Exactly(1));
         }
 
-        private static Noticia CreateNoticia(string title, string description = "Some text")
+        private static News CreateNews(string title, string description = "Some text")
         {
-            return new Noticia(title, DateTime.Now, DateTime.Now.Year, "https://example.com", description, "Scraper");
+            return new News(title, DateTime.Now, DateTime.Now.Year, "https://example.com", description, "Scraper");
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ArgosSharp.Domain.ValueObjects
 {
-    public class Noticia
+    public class News
     {
         public string Title { get; private set; } = string.Empty;
         public DateTime? DateTime { get; private set; }
@@ -9,7 +9,7 @@
         public string Abstract { get; private set; } = string.Empty;
         public string Source { get; private set; } = string.Empty;
 
-        public Noticia(
+        public News(
             string title,
             DateTime? dateTime,
             int year,
