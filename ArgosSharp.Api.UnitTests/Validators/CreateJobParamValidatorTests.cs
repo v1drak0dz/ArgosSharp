@@ -15,7 +15,6 @@ namespace ArgosSharp.Api.UnitTests.Validators
 
         [TestCase(0, TestName = "Test that the Depth validation rule is triggered when the Depth is zero.")]
         [TestCase(-1, TestName = "Test that the Depth validation rule is triggered when the Depth is lower than 0.")]
-        [TestCase(1, TestName = "Test that the Sites validation rule is triggered when the Sites list is empty.")]
         public void DepthRule_WhenDepthIsZero_ShouldHaveValidationError(int depth)
         {
             // Arrange
@@ -27,6 +26,20 @@ namespace ArgosSharp.Api.UnitTests.Validators
             // Assert
             result.IsValid.Should().BeFalse();
             result.Errors.First().ErrorMessage.Should().Be("Depth must be greater than 0.");
+        }
+
+        [Test(Description = "Test that the Depth validation rule is not triggered when the Depth is greater than 0.")]
+        public void DepthRule_WhenDepthIsGreaterThanZero_ShouldNotHaveValidationError()
+        {
+            // Arrange
+            var request = new CreateJobParametersRequest { Depth = 1, Sites = ["site1"] };
+
+            // Act
+            var result = _validator.Validate(request);
+
+            // Assert
+            result.IsValid.Should().BeTrue();
+            result.Errors.Count.Should().Be(0);
         }
 
         [TestCaseSource(nameof(InvalidSitesCases))]
