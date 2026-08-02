@@ -1,7 +1,7 @@
 ﻿using ArgosSharp.Application.Interfaces.UnitOfWork;
 using ArgosSharp.Application.UseCase.Scraper;
 using ArgosSharp.Domain.Enums;
-using ArgosSharp.Domain.ValueObjects;
+using ArgosSharp.Domain.Model;
 
 namespace ArgosSharp.Application.Services.JobProcessor
 {

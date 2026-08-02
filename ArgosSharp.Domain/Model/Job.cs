@@ -1,6 +1,7 @@
 ﻿using ArgosSharp.Domain.Enums;
+using ArgosSharp.Domain.ValueObjects;
 
-namespace ArgosSharp.Domain.ValueObjects
+namespace ArgosSharp.Domain.Model
 {
     public class Job(string searchTerm, JobParameters parameters, JobStatusEnum status)
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using ArgosSharp.Application.Interfaces.Repositories;
-using ArgosSharp.Domain.ValueObjects;
+using ArgosSharp.Domain.Model;
 
 namespace ArgosSharp.Infrastructure.Repositories
 {

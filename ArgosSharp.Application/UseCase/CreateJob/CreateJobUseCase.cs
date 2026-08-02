@@ -2,7 +2,7 @@
 using ArgosSharp.Application.Services.JobQueue;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.Factories.JobFactory;
-using ArgosSharp.Domain.ValueObjects;
+using ArgosSharp.Domain.Model;
 
 namespace ArgosSharp.Application.UseCase.CreateJob
 {

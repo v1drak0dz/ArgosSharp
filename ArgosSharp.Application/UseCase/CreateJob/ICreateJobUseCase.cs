@@ -1,4 +1,4 @@
-﻿using ArgosSharp.Domain.ValueObjects;
+﻿using ArgosSharp.Domain.Model;
 
 namespace ArgosSharp.Application.UseCase.CreateJob
 {

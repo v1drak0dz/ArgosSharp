@@ -2,7 +2,7 @@
 using ArgosSharp.Application.Interfaces.Repositories;
 using ArgosSharp.Application.Interfaces.UnitOfWork;
 using ArgosSharp.Domain.Enums;
-using ArgosSharp.Domain.ValueObjects;
+using ArgosSharp.Domain.Model;
 
 namespace ArgosSharp.Infrastructure.UnitOfWork
 {
