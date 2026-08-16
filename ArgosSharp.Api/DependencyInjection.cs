@@ -7,9 +7,9 @@ using ArgosSharp.Infrastructure.Strategies.Scrapers;
 
 namespace ArgosSharp.Api
 {
-    public static class DependencyInjection
+    internal static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        internal static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddHttpClient();
             services.AddScoped<IHttpFetcher, HttpClientFetcher>();

@@ -1,0 +1,29 @@
+flowchart LR
+
+subgraph API
+A[POST /jobs]
+B[CreateJobRequest]
+end
+
+subgraph Application
+C[CreateJobUseCase]
+end
+
+subgraph Domain
+D[JobParameters]
+E["Job.Create(...)"]
+F[Job]
+end
+
+subgraph Infrastructure
+G[IJobRepository]
+H[(Persistência)]
+end
+
+A --> B
+B --> C
+C --> D
+D --> E
+E --> F
+F --> G
+G --> H

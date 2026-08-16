@@ -6,6 +6,7 @@ using ArgosSharp.Application.Interfaces.UnitOfWork;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
 using ArgosSharp.Domain.Factories.JobFactory;
+using ArgosSharp.Domain.Entity;
 
 namespace ArgosSharp.Application.UnitTests.Services
 {

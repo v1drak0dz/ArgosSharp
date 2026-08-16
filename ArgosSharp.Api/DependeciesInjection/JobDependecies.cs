@@ -10,9 +10,9 @@ using ArgosSharp.Infrastructure.UnitOfWork;
 
 namespace ArgosSharp.Api.DependeciesInjection
 {
-    public static class JobDependecies
+    internal static class JobDependecies
     {
-        public static IServiceCollection AddJobDependencies(this IServiceCollection services)
+        internal static IServiceCollection AddJobDependencies(this IServiceCollection services)
         {
             services.AddSingleton<IJobQueue, JobQueue>();
             

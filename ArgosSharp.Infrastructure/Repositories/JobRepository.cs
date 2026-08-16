@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using ArgosSharp.Application.Interfaces.Repositories;
-using ArgosSharp.Domain.ValueObjects;
+using ArgosSharp.Domain.Entity;
 
 namespace ArgosSharp.Infrastructure.Repositories
 {
@@ -12,7 +12,7 @@ namespace ArgosSharp.Infrastructure.Repositories
         /// <inheritdoc cref="IJobRepository" />
         public Task AddAsync(Job job)
         {
-            job.JobId = Interlocked.Increment(ref currentJobId);
+            job.Id = Interlocked.Increment(ref currentJobId);
             _jobs[job.JobHash] = job;
             return Task.CompletedTask;
         }

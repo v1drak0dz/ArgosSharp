@@ -1,7 +1,7 @@
 ﻿using ArgosSharp.Application.Interfaces.UnitOfWork;
 using ArgosSharp.Application.UseCase.Scraper;
+using ArgosSharp.Domain.Entity;
 using ArgosSharp.Domain.Enums;
-using ArgosSharp.Domain.ValueObjects;
 
 namespace ArgosSharp.Application.Services.JobProcessor
 {
@@ -20,13 +20,13 @@ namespace ArgosSharp.Application.Services.JobProcessor
 
                 var data = await scraperProcessor.GetNews(job.SearchTerm, depth, sources);
 
-                job.Data = data;
+                //job.Data = data;
 
                 await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Completed);
             }
             catch (Exception ex)
             {
-                job.Error = ex.Message;
+                //job.Error = ex.Message;
                 await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Failed);
             }
         }

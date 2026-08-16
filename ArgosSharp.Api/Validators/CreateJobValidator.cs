@@ -1,11 +1,11 @@
-﻿using ArgosSharp.Api.DTOs.Job.CreateJob;
+﻿using ArgosSharp.Application.Contracts.Jobs;
 using FluentValidation;
 
 namespace ArgosSharp.Api.Validators
 {
-    public class CreateJobValidator : AbstractValidator<CreateJobRequest>
+    internal class CreateJobValidator : AbstractValidator<CreateJobRequest>
     {
-        public CreateJobValidator()
+        internal CreateJobValidator()
         {
             RuleFor(x => x.SearchTerm)
                 .NotEmpty().WithMessage("SearchTerm is required.");

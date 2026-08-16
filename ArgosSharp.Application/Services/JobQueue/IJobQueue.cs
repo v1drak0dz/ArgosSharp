@@ -1,4 +1,4 @@
-﻿using ArgosSharp.Domain.ValueObjects;
+﻿using ArgosSharp.Domain.Entity;
 
 namespace ArgosSharp.Application.Services.JobQueue
 {

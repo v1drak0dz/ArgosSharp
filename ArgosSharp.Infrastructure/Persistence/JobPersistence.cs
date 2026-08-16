@@ -1,5 +1,5 @@
 ﻿using ArgosSharp.Application.Interfaces.Persistence;
-using ArgosSharp.Domain.ValueObjects;
+using ArgosSharp.Domain.Entity;
 using System.Text.Json;
 
 namespace ArgosSharp.Infrastructure.Persistence
