@@ -1,6 +1,7 @@
-﻿using ArgosSharp.Domain.Model;
+﻿using ArgosSharp.Domain.Entity;
+using ArgosSharp.Application.Contracts.Jobs;
 
-namespace ArgosSharp.Application.UseCase.CreateJob
+namespace ArgosSharp.Application.UseCase.Jobs.CreateJob
 {
     public interface ICreateJobUseCase
     {
@@ -13,6 +14,6 @@ namespace ArgosSharp.Application.UseCase.CreateJob
         /// <param name="sites">List of site identifiers to scrape.</param>
         /// <param name="depth">Scraping depth to use for the job.</param>
         /// <returns>The created and persisted <see cref="Job"/> instance.</returns>
-        Task<Job> CreateJob(string term, List<string> sites, int depth);
+        Task<Job> CreateJob(CreateJobRequest createJobRequest);
     }
 }

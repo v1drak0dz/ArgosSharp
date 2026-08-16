@@ -1,4 +1,4 @@
-﻿using ArgosSharp.Domain.Model;
+﻿using ArgosSharp.Domain.Entity;
 using System.Threading.Channels;
 
 namespace ArgosSharp.Application.Services.JobQueue

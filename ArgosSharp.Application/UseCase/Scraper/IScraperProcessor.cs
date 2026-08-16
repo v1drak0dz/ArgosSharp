@@ -2,7 +2,7 @@
 
 namespace ArgosSharp.Application.UseCase.Scraper
 {
-    internal interface IScraperProcessor
+    public interface IScraperProcessor
     {
         /// <summary>
         /// Retrieves news items from the configured scraper sources for the

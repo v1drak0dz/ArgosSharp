@@ -1,5 +1,5 @@
-﻿using ArgosSharp.Domain.Enums;
-using ArgosSharp.Domain.Model;
+﻿using ArgosSharp.Domain.Entity;
+using ArgosSharp.Domain.Enums;
 
 namespace ArgosSharp.Application.Interfaces.UnitOfWork
 {

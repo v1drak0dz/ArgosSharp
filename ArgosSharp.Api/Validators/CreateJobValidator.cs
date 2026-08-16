@@ -1,4 +1,4 @@
-﻿using ArgosSharp.Api.DTOs.Job.CreateJob;
+﻿using ArgosSharp.Application.Contracts.Jobs;
 using FluentValidation;
 
 namespace ArgosSharp.Api.Validators

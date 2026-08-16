@@ -1,4 +1,4 @@
-﻿using ArgosSharp.Domain.Model;
+﻿using ArgosSharp.Domain.Entity;
 
 namespace ArgosSharp.Application.Interfaces.Repositories
 {

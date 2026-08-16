@@ -1,0 +1,27 @@
+sequenceDiagram
+    actor User
+    participant Controller as JobsController
+    participant UseCase as CreateJobUseCase
+    participant Entity as Job
+    participant Repository as IJobRepository
+    participant Persistence as JobPersistence
+
+    User->>Controller: POST /jobs (CreateJobRequest)
+
+    Controller->>UseCase: Execute(request)
+
+    Note over UseCase: Cria JobParameters
+
+    UseCase->>Entity: Job.Create(...)
+    Entity-->>UseCase: Job
+
+    UseCase->>Repository: AddAsync(job)
+
+    Repository->>Persistence: Save(job)
+
+    Persistence-->>Repository: OK
+    Repository-->>UseCase: OK
+
+    UseCase-->>Controller: Job criado
+
+    Controller-->>User: 201 Created

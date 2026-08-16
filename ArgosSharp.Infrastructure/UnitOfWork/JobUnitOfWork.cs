@@ -1,8 +1,8 @@
 ﻿using ArgosSharp.Application.Interfaces.Persistence;
 using ArgosSharp.Application.Interfaces.Repositories;
 using ArgosSharp.Application.Interfaces.UnitOfWork;
+using ArgosSharp.Domain.Entity;
 using ArgosSharp.Domain.Enums;
-using ArgosSharp.Domain.Model;
 
 namespace ArgosSharp.Infrastructure.UnitOfWork
 {
