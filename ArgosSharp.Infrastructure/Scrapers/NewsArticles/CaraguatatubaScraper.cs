@@ -1,15 +1,15 @@
 ﻿using ArgosSharp.Application.Interfaces.Fetcher;
 using ArgosSharp.Application.Interfaces.Parser;
-using ArgosSharp.Application.Interfaces.Strategies;
 using ArgosSharp.Domain.ValueObjects;
 using System.Net;
 using Microsoft.Extensions.Logging;
 using ArgosSharp.Infrastructure.Utils;
 using ArgosSharp.Infrastructure.Mapper;
+using ArgosSharp.Application.Interfaces.Scrapers;
 
-namespace ArgosSharp.Infrastructure.Scrapers.NewsArticle
+namespace ArgosSharp.Infrastructure.Scrapers.NewsArticles
 {
-    public class CaraguatatubaScraper(IHttpFetcher _fetcher, IHtmlParser _parser, ILogger<CaraguatatubaScraper> _logger) : IScraperStrategy
+    public class CaraguatatubaScraper(IHttpFetcher _fetcher, IHtmlParser _parser, ILogger<CaraguatatubaScraper> _logger) : INewsArticlesScrapers
     {
         public string Name { get; set; } = "caraguatatuba";
 
@@ -25,7 +25,7 @@ namespace ArgosSharp.Infrastructure.Scrapers.NewsArticle
             News = "div[id*='latestNews'] > div[class*='row']"
         };
 
-        public async Task<List<NewsArticles>> ProcessScraperAsync(string searchTerm, int depth)
+        public async Task<List<NewsArticle>> ProcessScraperAsync(string searchTerm, int depth)
         {
             var news = new List<string>();
 

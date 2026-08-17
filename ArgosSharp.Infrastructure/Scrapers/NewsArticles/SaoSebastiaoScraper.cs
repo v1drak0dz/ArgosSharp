@@ -1,15 +1,15 @@
 ﻿using ArgosSharp.Application.Interfaces.Fetcher;
 using ArgosSharp.Application.Interfaces.Parser;
-using ArgosSharp.Application.Interfaces.Strategies;
+using ArgosSharp.Application.Interfaces.Scrapers;
 using ArgosSharp.Domain.ValueObjects;
 using ArgosSharp.Infrastructure.Mapper;
 using ArgosSharp.Infrastructure.Utils;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace ArgosSharp.Infrastructure.Scrapers.NewsArticle
+namespace ArgosSharp.Infrastructure.Scrapers.NewsArticles
 {
-    public class SaoSebastiaoScraper(ILogger<SaoSebastiaoScraper> _logger, IHttpFetcher _fetcher, IHtmlParser _parser) : IScraperStrategy
+    public class SaoSebastiaoScraper(ILogger<SaoSebastiaoScraper> _logger, IHttpFetcher _fetcher, IHtmlParser _parser) : INewsArticlesScrapers
     {
         public string Name { get; set; } = "sao_sebastiao";
 
@@ -26,7 +26,7 @@ namespace ArgosSharp.Infrastructure.Scrapers.NewsArticle
             Link = "h2 > a::attr(href)"
         };
 
-        public async Task<List<NewsArticles>> ProcessScraperAsync(string searchTerm, int depth)
+        public async Task<List<NewsArticle>> ProcessScraperAsync(string searchTerm, int depth)
         {
             var news = new List<string>();
             var termParsed = WebUtility.UrlEncode(searchTerm);
