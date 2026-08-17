@@ -14,6 +14,6 @@ namespace ArgosSharp.Application.UseCase.Scraper
         /// <param name="depth">The scraping depth to apply.</param>
         /// <returns>A list of news items retrieved from the source.</returns>
         /// <exception cref="KeyNotFoundException">Thrown when the specified scraper source is not registered.</exception>
-        Task<List<News>> GetNewsBySourceAsync(string scraperSource, string searchTerm, int depth);
+        Task<List<NewsArticles>> GetNewsBySourceAsync(string scraperSource, string searchTerm, int depth);
     }
 }

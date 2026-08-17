@@ -7,7 +7,7 @@ using ArgosSharp.Infrastructure.Http.Parser;
 using ArgosSharp.Infrastructure.Persistence;
 using ArgosSharp.Infrastructure.Persistence.Configurations;
 using ArgosSharp.Infrastructure.Repositories;
-using ArgosSharp.Infrastructure.Strategies.Scrapers;
+using ArgosSharp.Infrastructure.Scrapers.NewsArticle;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

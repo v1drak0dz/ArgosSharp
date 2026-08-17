@@ -16,8 +16,8 @@ namespace ArgosSharp.Infrastructure.Mapper
         /// <param name="parser">The HTML parser to use for extracting text content.</param>
         /// <param name="selectors">The CSS selectors configuration for extracting specific fields.</param>
         /// <param name="source">The source identifier to associate with the news item.</param>
-        /// <returns>A new <see cref="News"/> instance populated from the parsed HTML.</returns>
-        public static News Map(
+        /// <returns>A new <see cref="NewsArticles"/> instance populated from the parsed HTML.</returns>
+        public static NewsArticles Map(
             string html,
             IHtmlParser parser,
             ScraperSelectors selectors,
@@ -26,7 +26,7 @@ namespace ArgosSharp.Infrastructure.Mapper
         {
             var rawDate = parser.QueryText(html, selectors.Date);
             DateTime.TryParseExact(rawDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date);
-            return new News(
+            return new NewsArticles(
                 title: parser.QueryText(html, selectors.Title) ?? "No title",
                 dateTime: date,
                 year: date.Year,

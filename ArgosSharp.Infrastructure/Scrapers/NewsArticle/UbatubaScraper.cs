@@ -7,7 +7,7 @@ using ArgosSharp.Infrastructure.Utils;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace ArgosSharp.Infrastructure.Strategies.Scrapers
+namespace ArgosSharp.Infrastructure.Scrapers.NewsArticle
 {
     public class UbatubaScraper(ILogger<UbatubaScraper> _logger, IHttpFetcher _fetcher, IHtmlParser _parser) : IScraperStrategy
     {
@@ -26,7 +26,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
             Date = "time::text()"
         };
 
-        public async Task<List<News>> ProcessScraperAsync(string searchTerm, int depth)
+        public async Task<List<NewsArticles>> ProcessScraperAsync(string searchTerm, int depth)
         {
             var news = new List<string>();
             var termParsed = WebUtility.UrlEncode(searchTerm);

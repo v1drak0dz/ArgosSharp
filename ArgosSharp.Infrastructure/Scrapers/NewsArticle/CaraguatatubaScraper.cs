@@ -2,38 +2,39 @@
 using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Application.Interfaces.Strategies;
 using ArgosSharp.Domain.ValueObjects;
-using ArgosSharp.Infrastructure.Mapper;
-using ArgosSharp.Infrastructure.Utils;
-using Microsoft.Extensions.Logging;
 using System.Net;
+using Microsoft.Extensions.Logging;
+using ArgosSharp.Infrastructure.Utils;
+using ArgosSharp.Infrastructure.Mapper;
 
-namespace ArgosSharp.Infrastructure.Strategies.Scrapers
+namespace ArgosSharp.Infrastructure.Scrapers.NewsArticle
 {
-    public class SaoSebastiaoScraper(ILogger<SaoSebastiaoScraper> _logger, IHttpFetcher _fetcher, IHtmlParser _parser) : IScraperStrategy
+    public class CaraguatatubaScraper(IHttpFetcher _fetcher, IHtmlParser _parser, ILogger<CaraguatatubaScraper> _logger) : IScraperStrategy
     {
-        public string Name { get; set; } = "sao_sebastiao";
+        public string Name { get; set; } = "caraguatatuba";
 
-        private const string BaseUrl = "https://www.saosebastiao.sp.gov.br/";
-        private const string BaseSearch = BaseUrl + "noticia-lista.asp?idTitulo=";
+        private const string BaseUrl = "https://www.caraguatatuba.sp.gov.br/pmc";
 
         private static readonly ScraperSelectors Selectors = new()
         {
-            Pagination = "div[id*='news_paging'] > li",
-            News = "div[id*='page-content'] > article",
-            Date = "div[class*='notice-date']::text()",
-            Title = "h2 > a::text()",
-            Abstract = "",
-            Link = "h2 > a::attr(href)"
+            Date = "span[class*='created-at']::text()",
+            Title = "h5 > a::text()",
+            Link = "h5 > a::attr(href)",
+            Abstract = "div[class*='news-text'] > p::text()",
+            Pagination = "ul[class*='pagination'] > li",
+            News = "div[id*='latestNews'] > div[class*='row']"
         };
 
-        public async Task<List<News>> ProcessScraperAsync(string searchTerm, int depth)
+        public async Task<List<NewsArticles>> ProcessScraperAsync(string searchTerm, int depth)
         {
             var news = new List<string>();
+
             var termParsed = WebUtility.UrlEncode(searchTerm);
 
-            _logger.LogInformation("Initianting data gettering using term {SearchTerm} in São Sebastião", searchTerm);
+            _logger.LogInformation("Initiating data gathering using term {SearchTerm} in Caraguatatuba", searchTerm);
 
-            var html = await _fetcher.GetStringAsync($"{BaseSearch}{termParsed}");
+            var html = await _fetcher.GetStringAsync($"{BaseUrl}/?s={termParsed}");
+
             var maxPage = GetPaginationIfExists(html);
             var limit = Math.Min(maxPage, depth);
 
@@ -43,14 +44,14 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
             return [.. news.Select(x => NewsMapper.Map(x, _parser, Selectors, Name))];
         }
 
-        private int GetPaginationIfExists(string html)
+        private int GetPaginationIfExists(string document)
         {
-            var pagination = _parser.QueryTexts(html, Selectors.Pagination).ToList();
+            var pagination = _parser.QueryTexts(document, Selectors.Pagination)?.ToList() ?? [];
 
             var maxPage = PaginationExtractor.GetMaxPage(pagination);
-            
-            _logger.LogInformation("Found {PageQuantity} pages to scrape", maxPage);
-            
+
+            _logger.LogInformation("Detected {PageQuantity} pages from pagination", maxPage);
+
             return maxPage;
         }
 
@@ -59,7 +60,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
             var news = _parser.QueryTexts(document, Selectors.News).ToList();
 
             _logger.LogInformation("Found {NewsCount} news", news.Count);
-            
+
             return news;
         }
 
@@ -68,7 +69,7 @@ namespace ArgosSharp.Infrastructure.Strategies.Scrapers
             List<string> newsRaw = [];
             for (var i = 2; i <= maxPage; i++)
             {
-                var html = await _fetcher.GetStringAsync($"{BaseSearch}{term}&pg={i}");
+                var html = await _fetcher.GetStringAsync($"{BaseUrl}/page/{i}/?s={term}");
                 var news = GetNewsIfExists(html);
                 if (news.Count > 0)
                     newsRaw.AddRange(news);

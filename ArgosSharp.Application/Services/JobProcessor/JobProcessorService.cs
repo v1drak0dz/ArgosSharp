@@ -18,7 +18,7 @@ namespace ArgosSharp.Application.Services.JobProcessor
             // update start datetime on jobexecution object
 
             // Call Scraper Strategy based on source
-            var news = new List<News>();
+            var news = new List<NewsArticles>();
             var parameters = jobExecution.Parameters;
             foreach (var source in parameters.Sources)
                 news.AddRange(await scraperStrategyContext.GetNewsBySourceAsync(source, parameters.Query, parameters.Depth));
