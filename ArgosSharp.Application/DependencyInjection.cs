@@ -14,7 +14,7 @@ namespace ArgosSharp.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection service)
         {
-            service.AddSingleton<IJobQueue, JobQueue>();
+            service.AddSingleton<IJobExecutionQueue, JobExecutionQueue>();
 
             service.AddScoped<IScraperStrategyContext, ScraperStrategyContext>();
             service.AddScoped<IJobProcessorService, JobProcessorService>();

@@ -30,5 +30,10 @@ namespace ArgosSharp.Application.Interfaces.Repositories
         /// <param name="job">The job to update.</param>
         /// <returns>A completed task.</returns>
         Task UpdateAsync(JobExecution job);
+
+        Task EnqueuedAsync(JobExecution job);
+        Task CompleteAsync(JobExecution job);
+        Task FailAsync(JobExecution job);
+        Task ProcessingAsync(JobExecution job);
     }
 }
