@@ -2,16 +2,16 @@
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
 
-namespace ArgosSharp.Application.StrategiesContext.Scraper
+namespace ArgosSharp.Application.UseCase.Scraper
 {
-    public class ScraperStrategyContext : IScraperStrategyContext
+    public class ScraperContext : IScraperContext
     {
         private readonly Dictionary<string, IScraperStrategy> _strategies;
 
-        public ScraperStrategyContext(IEnumerable<IScraperStrategy> strategies) =>
+        public ScraperContext(IEnumerable<IScraperStrategy> strategies) =>
             _strategies = strategies.ToDictionary(s => s.Name);
 
-        /// <inheritdoc cref="IScraperStrategyContext"/>
+        /// <inheritdoc cref="IScraperContext"/>
         public async Task<List<News>> GetNewsBySourceAsync(string scraperSource, string searchTerm, int depth) =>
             await _strategies[scraperSource].ProcessScraperAsync(searchTerm, depth);
     }

@@ -1,9 +1,9 @@
 ﻿using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
 
-namespace ArgosSharp.Application.StrategiesContext.Scraper
+namespace ArgosSharp.Application.UseCase.Scraper
 {
-    public interface IScraperStrategyContext
+    public interface IScraperContext
     {
         /// <summary>
         /// Retrieves news items from the specified scraper source for the given search term and depth.

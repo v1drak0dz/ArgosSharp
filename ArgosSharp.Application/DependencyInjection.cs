@@ -1,7 +1,6 @@
 ﻿using ArgosSharp.Application.Services.JobProcessor;
 using ArgosSharp.Application.Services.JobQueue;
 using ArgosSharp.Application.Services.JobWorker;
-using ArgosSharp.Application.StrategiesContext.Scraper;
 using ArgosSharp.Application.UseCase.Jobs.CreateJob;
 using ArgosSharp.Application.UseCase.Jobs.GetJob;
 using ArgosSharp.Application.UseCase.JobsExecution.CreateJobExecution;
@@ -16,9 +15,8 @@ namespace ArgosSharp.Application
         {
             service.AddSingleton<IJobExecutionQueue, JobExecutionQueue>();
 
-            service.AddScoped<IScraperStrategyContext, ScraperStrategyContext>();
+            service.AddScoped<IScraperContext, ScraperContext>();
             service.AddScoped<IJobProcessorService, JobProcessorService>();
-            service.AddScoped<IScraperProcessor, ScraperProcessor>();
 
             service.AddScoped<ICreateJobUseCase, CreateJobUseCase>();
             service.AddScoped<IGetJobUseCase, GetJobUseCase>();

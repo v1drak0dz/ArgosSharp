@@ -14,6 +14,6 @@ namespace ArgosSharp.Application.Services.JobProcessor
         /// </summary>
         /// <param name="job">The job to process.</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        Task ProcessJobAsync(Job job);
+        Task ProcessJobAsync(JobExecution job);
     }
 }
