@@ -5,7 +5,7 @@ using ArgosSharp.Domain.Enums;
 
 namespace ArgosSharp.Application.Services.JobProcessor
 {
-    public class JobProcessorService(IScraperProcessor scraperProcessor, IJobUnitOfWork jobUnitOfWork) : IJobProcessorService
+    public class JobProcessorService(IScraperProcessor scraperProcessor) : IJobProcessorService
     {
 
         /// <inheritdoc cref="IJobProcessorService"/>
@@ -13,21 +13,21 @@ namespace ArgosSharp.Application.Services.JobProcessor
         {
             try
             {
-                await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Processing);
+                //await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Processing);
 
-                var sources = job.Parameters.Sites.AsEnumerable();
-                var depth = job.Parameters.Depth;
+                //var sources = job.Parameters.Sites.AsEnumerable();
+                //var depth = job.Parameters.Depth;
 
-                var data = await scraperProcessor.GetNews(job.SearchTerm, depth, sources);
+                //var data = await scraperProcessor.GetNews(job.SearchTerm, depth, sources);
 
                 //job.Data = data;
 
-                await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Completed);
+                //await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Completed);
             }
             catch (Exception ex)
             {
                 //job.Error = ex.Message;
-                await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Failed);
+                //await jobUnitOfWork.UpdateJobStatus(job, JobStatusEnum.Failed);
             }
         }
     }
