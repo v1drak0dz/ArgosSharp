@@ -7,8 +7,6 @@ namespace ArgosSharp.Api.Validators
     {
         internal CreateJobValidator()
         {
-            RuleFor(x => x.SearchTerm)
-                .NotEmpty().WithMessage("SearchTerm is required.");
             RuleFor(x => x.Parameters)
                 .NotNull().WithMessage("Parameters are required.");
         }

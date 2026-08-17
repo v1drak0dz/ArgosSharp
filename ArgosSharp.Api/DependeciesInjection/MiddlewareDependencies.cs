@@ -6,7 +6,7 @@ namespace ArgosSharp.Api.DependeciesInjection
     {
         internal static IServiceCollection AddMiddlewareDependencies(this IServiceCollection services)
         {
-            services.AddScoped<MainMiddleware, MainMiddleware>();
+            
             return services;
         }
     }

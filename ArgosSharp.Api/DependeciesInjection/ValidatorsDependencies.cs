@@ -9,7 +9,6 @@ namespace ArgosSharp.Api.DependeciesInjection
         internal static IServiceCollection AddValidators(this IServiceCollection services)
         {
             services.AddValidatorsFromAssemblyContaining<CreateJobValidator>();
-            services.AddValidatorsFromAssemblyContaining<CreateJobParametersValidator>();
 
             return services;
         }

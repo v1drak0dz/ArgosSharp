@@ -1,6 +1,6 @@
 @ArgosSharp.Api_HostAddress = http://localhost:5048
 
-GET {{ArgosSharp.Api_HostAddress}}/weatherforecast/
+GET {{ArgosSharp.Api_HostAddress}}/swagger
 Accept: application/json
 
 ###
