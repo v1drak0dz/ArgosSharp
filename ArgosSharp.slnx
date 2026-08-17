@@ -1,8 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
-    <File Path="JobCreationDiagram.mmd" />
-    <File Path="JobCreationDiagramLayers.mmd" />
-    <File Path="TestReport.ps1" />
+    <File Path=".env" />
+    <File Path="compose.yaml" />
   </Folder>
   <Folder Name="/Tests/" />
   <Folder Name="/Tests/UnitTests/">
