@@ -4,6 +4,7 @@ using ArgosSharp.Application.Services.JobWorker;
 using ArgosSharp.Application.StrategiesContext.Scraper;
 using ArgosSharp.Application.UseCase.Jobs.CreateJob;
 using ArgosSharp.Application.UseCase.Jobs.GetJob;
+using ArgosSharp.Application.UseCase.JobsExecution.CreateJobExecution;
 using ArgosSharp.Application.UseCase.Scraper;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,6 +22,8 @@ namespace ArgosSharp.Application
 
             service.AddScoped<ICreateJobUseCase, CreateJobUseCase>();
             service.AddScoped<IGetJobUseCase, GetJobUseCase>();
+
+            service.AddScoped<ICreateJobExecutionUseCase, CreateJobExecutionUseCase>();
 
             service.AddHostedService<JobWorker>();
             service.AddHostedService<JobWorker>();

@@ -7,6 +7,7 @@
   <Folder Name="/Tests/UnitTests/">
     <Project Path="ArgosSharp.Api.UnitTests/ArgosSharp.Api.UnitTests.csproj" />
     <Project Path="ArgosSharp.Application.UnitTests/ArgosSharp.Application.UnitTests.csproj" Id="52ed77e6-0e27-4cd4-81f1-9c54d65ad797" />
+    <Project Path="ArgosSharp.Domain.UnitTests/ArgosSharp.Domain.UnitTests.csproj" Id="ec120829-d1a8-409c-8d5e-c543531d991b" />
     <Project Path="ArgosSharp.Infrastructure.UnitTests/ArgosSharp.Infrastructure.UnitTests.csproj" Id="6a395520-6747-4f4f-a237-df435d23980e" />
   </Folder>
   <Project Path="ArgosSharp.Api/ArgosSharp.Api.csproj" Id="36123773-cfd1-4a70-8683-4123f207be65" />

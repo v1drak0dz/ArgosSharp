@@ -1,5 +1,4 @@
-﻿using ArgosSharp.Application.Interfaces.UnitOfWork;
-using ArgosSharp.Application.UseCase.Scraper;
+﻿using ArgosSharp.Application.UseCase.Scraper;
 using ArgosSharp.Domain.Entity;
 using ArgosSharp.Domain.Enums;
 

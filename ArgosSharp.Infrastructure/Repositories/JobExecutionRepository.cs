@@ -1,0 +1,29 @@
+﻿using ArgosSharp.Application.Interfaces.Repositories;
+using ArgosSharp.Domain.Entity;
+using ArgosSharp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+
+namespace ArgosSharp.Infrastructure.Repositories
+{
+    public class JobExecutionRepository(ArgosDbContext argosDbContext) : IJobExecutionRepository
+    {
+        public async Task AddAsync(JobExecution job)
+        {
+            argosDbContext.JobExecutions.Add(job);
+            await argosDbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(JobExecution job)
+        {
+            argosDbContext.Update(job);
+            await argosDbContext.SaveChangesAsync();
+        }
+
+        public async Task<JobExecution?> GetAsync(int Id) =>
+            await argosDbContext.JobExecutions.FirstOrDefaultAsync(x => x.Id == Id);
+
+        public async Task<List<JobExecution>> GetAllAsync() =>
+            await argosDbContext.JobExecutions.ToListAsync();
+
+    }
+}
