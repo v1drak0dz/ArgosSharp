@@ -3,7 +3,7 @@
     public enum JobPriority
     {
         Low,
-        Medium,
+        Normal,
         High
     }
 }

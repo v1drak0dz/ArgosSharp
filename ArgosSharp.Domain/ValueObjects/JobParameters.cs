@@ -1,10 +1,18 @@
-﻿using ArgosSharp.Domain.Enums;
-
-namespace ArgosSharp.Domain.ValueObjects
+﻿namespace ArgosSharp.Domain.ValueObjects
 {
-    public class JobParameters(List<string> sites, int depth)
+    public sealed class JobParameters
     {
-        public List<string> Sites { get; set; } = sites;
-        public int Depth { get; set; } = depth;
+        public string Query { get; set; }
+        public IReadOnlyCollection<string> Sources { get; set; }
+        public int Depth { get; set; }
+
+        private JobParameters() { }
+
+        public JobParameters(string query, IReadOnlyCollection<string> sources, int depth)
+        {
+            Query = query;
+            Sources = sources;
+            Depth = depth;
+        }
     }
 }
