@@ -1,53 +1,29 @@
-﻿using System.Collections.Concurrent;
-using ArgosSharp.Application.Interfaces.Repositories;
+﻿using ArgosSharp.Application.Interfaces.Repositories;
 using ArgosSharp.Domain.Entity;
+using ArgosSharp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArgosSharp.Infrastructure.Repositories
 {
-    public class JobRepository : IJobRepository
+    public class JobRepository(ArgosDbContext argosDbContext) : IJobRepository
     {
-        private readonly ConcurrentDictionary<Guid, Job> _jobs = new();
-        private int currentJobId = 0;
-
-        /// <inheritdoc cref="IJobRepository" />
-        public Task AddAsync(Job job)
+        public async Task AddAsync(Job job)
         {
-            job.Id = Interlocked.Increment(ref currentJobId);
-            _jobs[job.JobHash] = job;
-            return Task.CompletedTask;
+            argosDbContext.Jobs.Add(job);
+            await argosDbContext.SaveChangesAsync();
         }
 
-        /// <inheritdoc cref="IJobRepository" />
-        public Task<Job?> GetAsync(Guid jobHash)
+        public async Task UpdateAsync(Job job)
         {
-            _jobs.TryGetValue(jobHash, out var job);
-            return Task.FromResult(job);
+            argosDbContext.Update(job);
+            await argosDbContext.SaveChangesAsync();
         }
 
-        /// <inheritdoc cref="IJobRepository" />
-        public Task<List<Job>> GetAllAsync()
-        {
-            return Task.FromResult(_jobs.Values.ToList());
-        }
+        public async Task<Job?> GetAsync(int Id) =>
+            await argosDbContext.Jobs.FirstOrDefaultAsync(x => x.Id == Id);
 
-        /// <inheritdoc cref="IJobRepository" />
-        public Task UpdateAsync(Job job)
-        {
-            _jobs[job.JobHash] = job;
-            return Task.CompletedTask;
-        }
+        public async Task<List<Job>> GetAllAsync() =>
+            await argosDbContext.Jobs.ToListAsync();
 
-        /// <inheritdoc cref="IJobRepository" />
-        public void Load(List<Job> jobs)
-        {
-            currentJobId = jobs.Count > 0 ? jobs.Max(x => x.JobId) : 0;
-
-            foreach (var job in jobs)
-                _jobs[job.JobHash] = job;
-        }
-
-        /// <inheritdoc cref="IJobRepository" />
-        public IEnumerable<Job> GetSnapshot() =>
-            _jobs.Values;
     }
 }
