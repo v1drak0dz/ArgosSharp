@@ -366,3 +366,7 @@ TestResult
 coverage
 /api
 /_site
+/ArgosSharp.Api/.env
+*.db
+*.db-shm
+*.db-wal
