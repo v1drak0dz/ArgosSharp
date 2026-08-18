@@ -7,6 +7,7 @@ namespace ArgosSharp.Infrastructure.Persistence
     {
         public DbSet<Job> Jobs => Set<Job>();
         public DbSet<JobExecution> JobExecutions => Set<JobExecution>();
+        public DbSet<Artifact> Artifacts => Set<Artifact>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

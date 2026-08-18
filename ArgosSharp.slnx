@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/Solution Items/">
-    <File Path=".env" />
     <File Path="compose.yaml" />
   </Folder>
   <Folder Name="/Solution Items/ADRs/">
