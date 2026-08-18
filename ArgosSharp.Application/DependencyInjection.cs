@@ -23,6 +23,8 @@ namespace ArgosSharp.Application
 
             service.AddScoped<ICreateJobExecutionUseCase, CreateJobExecutionUseCase>();
 
+            service.AddScoped<IScraperContext, ScraperContext>();
+
             service.AddHostedService<JobWorker>();
             service.AddHostedService<JobWorker>();
 

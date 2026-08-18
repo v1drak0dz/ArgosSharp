@@ -6,11 +6,11 @@ namespace ArgosSharp.Domain.Factories.JobFactory
 {
     public class JobFactory : IJobFactory
     {
-        public Job Create(string name, JobParameters parameters, JobPriority priority, bool enabled)
+        public Job Create(string name, JobType jobType, JobParameters parameters, JobPriority priority, bool enabled)
         {
             return string.IsNullOrEmpty(name) 
                 ? throw new ArgumentException(null, nameof(name))
-                : new Job(name, parameters, priority, enabled);
+                : new Job(name, jobType, parameters, priority, enabled);
         }
     }
 }

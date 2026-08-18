@@ -7,6 +7,7 @@ namespace ArgosSharp.Application.Contracts.Jobs
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public JobType JobType { get; set; }
         public JobParameters JobParameters { get; set; }
         public JobPriority Priority { get; set; }
         public bool Enabled { get; set; }

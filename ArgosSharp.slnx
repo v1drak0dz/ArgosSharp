@@ -3,6 +3,9 @@
     <File Path=".env" />
     <File Path="compose.yaml" />
   </Folder>
+  <Folder Name="/Solution Items/ADRs/">
+    <File Path="ADR-001-Sources-To-Types.md" />
+  </Folder>
   <Folder Name="/Tests/" />
   <Folder Name="/Tests/UnitTests/">
     <Project Path="ArgosSharp.Api.UnitTests/ArgosSharp.Api.UnitTests.csproj" />

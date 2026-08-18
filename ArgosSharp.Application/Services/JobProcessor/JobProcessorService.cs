@@ -8,7 +8,8 @@ namespace ArgosSharp.Application.Services.JobProcessor
 {
     internal class JobProcessorService(
         IJobExecutionRepository jobExecutionRepository,
-        IScraperContext scraperStrategyContext
+        IScraperContext scraperStrategyContext,
+        IJobRepository jobRepository
     ) : IJobProcessorService
     {
         /// <inheritdoc cref="IJobProcessorService"/>
@@ -18,12 +19,27 @@ namespace ArgosSharp.Application.Services.JobProcessor
             // update start datetime on jobexecution object
 
             // Call Scraper Strategy based on source
-            var news = new List<NewsArticle>();
-            var parameters = jobExecution.Parameters;
-            foreach (var source in parameters.Sources)
-                news.AddRange(await scraperStrategyContext.GetNewsBySourceAsync(source, parameters.Query, parameters.Depth));
+            var job = await jobRepository.GetAsync(jobExecution.JobId) ?? throw new InvalidOperationException();
+            switch (job.JobType)
+            {
+                case JobType.NewsArticles:
+                    _ = new JobExecutionResult
+                    {
+                        JobType = JobType.NewsArticles,
+                        Data = await scraperStrategyContext.GetNewsBySourceAsync(jobExecution.Parameters)
+                    };
+                    await jobExecutionRepository.CompleteAsync(jobExecution);
+                    return;
 
-            await jobExecutionRepository.CompleteAsync(jobExecution);
+                case JobType.JobPosting:
+                    _ = new JobExecutionResult
+                    {
+                        JobType = JobType.JobPosting,
+                        Data = await scraperStrategyContext.GetJobsBySourceAsync(jobExecution.Parameters)
+                    };
+                    await jobExecutionRepository.CompleteAsync(jobExecution);
+                    return;
+            }
         }
     }
 }

@@ -14,6 +14,9 @@ namespace ArgosSharp.Infrastructure.Persistence.Configurations
             builder.Property(x => x.Name)
                 .IsRequired();
 
+            builder.Property(x => x.JobType)
+                .IsRequired();
+
             builder.OwnsOne(x => x.Parameters, parameters =>
             {
                 parameters.Property(p => p.Query);

@@ -1,8 +1,6 @@
 ﻿using ArgosSharp.Application.Contracts.Jobs;
 using ArgosSharp.Application.Interfaces.Repositories;
-using ArgosSharp.Application.Services.JobQueue;
 using ArgosSharp.Domain.Entity;
-using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.Factories.JobFactory;
 
 namespace ArgosSharp.Application.UseCase.Jobs.CreateJob
@@ -18,6 +16,7 @@ namespace ArgosSharp.Application.UseCase.Jobs.CreateJob
             // Criar Job
             var job = jobFactory.Create(
                 createJobRequest.Name,
+                createJobRequest.JobType,
                 createJobRequest.Parameters,
                 createJobRequest.Priority,
                 createJobRequest.Enabled

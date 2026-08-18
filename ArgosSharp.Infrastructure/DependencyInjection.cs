@@ -20,10 +20,12 @@ namespace ArgosSharp.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ArgosDbContext>(options => options.UseNpgsql(DatabaseConfiguration.BuildConnectionString(configuration)));
-            
-            services.AddScoped<IJobRepository, JobRepository>();
+
             services.AddScoped<IHttpFetcher, HttpClientFetcher>();
             services.AddScoped<IHtmlParser, AngleSharpHtmlParser>();
+
+            services.AddScoped<IJobRepository, JobRepository>();
+            services.AddScoped<IJobExecutionRepository, JobExecutionRepository>();
 
             services.AddScoped<INewsArticlesScrapers, CaraguatatubaScraper>();
             services.AddScoped<INewsArticlesScrapers, SaoSebastiaoScraper>();

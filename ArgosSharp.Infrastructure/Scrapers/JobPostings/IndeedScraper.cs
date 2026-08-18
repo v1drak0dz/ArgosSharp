@@ -1,5 +1,4 @@
 ﻿using ArgosSharp.Application.Interfaces.Fetcher;
-using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Application.Interfaces.Scrapers;
 using ArgosSharp.Domain.ValueObjects;
 using ArgosSharp.Infrastructure.Mapper;
@@ -10,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace ArgosSharp.Infrastructure.Scrapers.JobPostings
 {
-    internal class IndeedScraper(
+    internal partial class IndeedScraper(
         IHttpFetcher fetcher,
         ILogger<IndeedScraper> logger)
     : IJobPostingsScrapers
@@ -35,14 +34,11 @@ namespace ArgosSharp.Infrastructure.Scrapers.JobPostings
             return jobs;
         }
 
-        private static List<JobPosting> ExtractJobsFromResults(string html)
+        private List<JobPosting> ExtractJobsFromResults(string html)
         {
             var jobs = new List<JobPosting>();
 
-            var match = Regex.Match(
-                html,
-                @"""results"":\s*(\[[\s\S]*?\])",
-                RegexOptions.Singleline);
+            var match = JobsResults().Match(html);
 
             if (!match.Success)
                 return jobs;
@@ -62,7 +58,7 @@ namespace ArgosSharp.Infrastructure.Scrapers.JobPostings
                         title ?? string.Empty,
                         NormalizeLink(link),
                         CleanText(snippet),
-                        "indeed"));
+                        Name));
             }
 
             return jobs;
@@ -89,5 +85,8 @@ namespace ArgosSharp.Infrastructure.Scrapers.JobPostings
 
             return $"https://br.indeed.com{link}";
         }
+
+        [GeneratedRegex(@"""results"":\s*(\[[\s\S]*?\])", RegexOptions.Singleline)]
+        private static partial Regex JobsResults();
     }
 }

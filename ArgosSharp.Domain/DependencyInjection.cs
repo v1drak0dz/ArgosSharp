@@ -1,4 +1,5 @@
-﻿using ArgosSharp.Domain.Factories.JobFactory;
+﻿using ArgosSharp.Domain.Factories.JobExecutionFactory.cs;
+using ArgosSharp.Domain.Factories.JobFactory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ArgosSharp.Domain
@@ -7,8 +8,8 @@ namespace ArgosSharp.Domain
     {
         public static IServiceCollection AddDomain(this IServiceCollection services)
         {
-
             services.AddScoped<IJobFactory, JobFactory>();
+            services.AddScoped<IJobExecutionFactory, JobExecutionFactory>();
 
             return services;
         }

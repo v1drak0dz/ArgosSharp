@@ -6,6 +6,6 @@ namespace ArgosSharp.Domain.Factories.JobFactory
 {
     public interface IJobFactory
     {
-        Job Create(string name, JobParameters parameters, JobPriority priority, bool enabled);
+        Job Create(string name, JobType jobType, JobParameters parameters, JobPriority priority, bool enabled);
     }
 }
