@@ -1,0 +1,84 @@
+sequenceDiagram
+    autonumber
+
+    participant API as ArgosSharp API
+    participant UC as CreateJobExecutionUseCase
+    participant Factory as JobExecutionFactory
+    participant Repo as JobExecutionRepository
+    participant Queue as JobExecutionQueue
+    participant Worker as JobWorker
+    participant Orchestrator as ProcessorOrchestrator
+    participant Scraper as ScraperProcessor
+    participant Context as ScraperContext
+    participant Strategy as Scraper Strategy
+    participant Export as ResultExportService
+    participant Exporter as ResultExporter
+    participant Artifact as ArtifactService
+    participant Storage as ArtifactStorage
+    participant S3 as MinIO / S3
+    participant ArtifactRepo as ArtifactRepository
+    participant DB as PostgreSQL
+
+    API->>UC: CreateJobExecution(request)
+    UC->>Factory: Create(job)
+    Factory-->>UC: JobExecution
+
+    UC->>Repo: AddAsync(execution)
+    Repo->>DB: INSERT JobExecution
+    DB-->>Repo: OK
+    Repo-->>UC: Saved
+
+    UC->>Queue: Enqueue(execution.Id)
+    Queue-->>UC: Queued
+    UC-->>API: JobExecution created
+
+    Worker->>Queue: Dequeue()
+    Queue-->>Worker: JobExecutionId
+
+    Worker->>Orchestrator: ProcessAsync(executionId)
+
+    Orchestrator->>Repo: GetAsync(executionId)
+    Repo->>DB: SELECT JobExecution
+    DB-->>Repo: JobExecution
+    Repo-->>Orchestrator: JobExecution
+
+    Orchestrator->>Repo: GetJobAsync(jobId)
+    Repo->>DB: SELECT Job
+    DB-->>Repo: Job
+    Repo-->>Orchestrator: Job
+
+    Orchestrator->>Scraper: ProcessAsync(job)
+
+    Scraper->>Context: Execute(source)
+
+    Context->>Strategy: Scrape(source)
+    Strategy-->>Context: Raw result
+
+    Context-->>Scraper: Result
+    Scraper-->>Orchestrator: JobExecutionResult
+
+    Orchestrator->>Export: ExportAsync(result)
+
+    Export->>Exporter: Export(result)
+    Exporter-->>Export: ResultExport
+    Export-->>Orchestrator: ResultExport
+
+    Orchestrator->>Artifact: CreateAsync(executionId, export)
+
+    Artifact->>Storage: UploadAsync(file)
+    Storage->>S3: PUT object
+    S3-->>Storage: Object stored
+    Storage-->>Artifact: ArtifactStorageResult
+
+    Artifact->>ArtifactRepo: AddAsync(artifact)
+    ArtifactRepo->>DB: INSERT Artifact
+    DB-->>ArtifactRepo: OK
+    ArtifactRepo-->>Artifact: Saved
+
+    Artifact-->>Orchestrator: Artifact
+
+    Orchestrator->>Repo: CompleteAsync(executionId)
+    Repo->>DB: UPDATE JobExecution
+    DB-->>Repo: OK
+
+    Orchestrator-->>Worker: Processing completed

@@ -1,0 +1,297 @@
+classDiagram
+    direction LR
+
+    %% =========================
+    %% Domain
+    %% =========================
+
+    class Job {
+        +int Id
+        +string Name
+        +JobType Type
+        +JobParameters Parameters
+        +JobPriority Priority
+        +bool Enabled
+    }
+
+    class JobExecution {
+        +int Id
+        +int JobId
+        +JobExecutionStatus Status
+        +DateTime CreatedAt
+        +DateTime StartedAt
+        +DateTime CompletedAt
+        +string Error
+    }
+
+    class Artifact {
+        +int Id
+        +int JobExecutionId
+        +string FileName
+        +string ContentType
+        +long Size
+        +string StorageKey
+        +DateTime CreatedAt
+    }
+
+    class JobParameters {
+        +string Query
+        +List~string~ Sources
+        +int Depth
+    }
+
+    class JobType {
+        <<enumeration>>
+        NewsArticles
+        JobPosting
+    }
+
+    class JobPriority {
+        <<enumeration>>
+        Low
+        Normal
+        High
+    }
+
+    class JobExecutionStatus {
+        <<enumeration>>
+        Pending
+        Processing
+        Completed
+        Failed
+    }
+
+    Job --> JobParameters
+    Job --> JobType
+    Job --> JobPriority
+    JobExecution --> Job
+    Artifact --> JobExecution
+
+
+    %% =========================
+    %% Application - Execution
+    %% =========================
+
+    class IJobExecutionQueue {
+        <<interface>>
+        +EnqueueAsync(int executionId)
+        +DequeueAsync()
+    }
+
+    class JobWorker {
+        <<HostedService>>
+        +ExecuteAsync()
+    }
+
+    class IProcessorOrchestrator {
+        <<interface>>
+        +ProcessAsync(int executionId)
+    }
+
+    class ProcessorOrchestrator {
+        +ProcessAsync(int executionId)
+    }
+
+    class IScraperProcessor {
+        <<interface>>
+        +ProcessAsync(Job job)
+    }
+
+    class ScraperProcessor {
+        +ProcessAsync(Job job)
+    }
+
+    JobWorker --> IJobExecutionQueue
+    JobWorker --> IProcessorOrchestrator
+
+    ProcessorOrchestrator ..|> IProcessorOrchestrator
+    ProcessorOrchestrator --> IScraperProcessor
+
+
+    %% =========================
+    %% Scraping
+    %% =========================
+
+    class IScraperStrategyContext {
+        <<interface>>
+        +GetNewsBySourceAsync()
+        +GetJobsBySourceAsync()
+    }
+
+    class ScraperStrategyContext {
+        +GetNewsBySourceAsync()
+        +GetJobsBySourceAsync()
+    }
+
+    class IScraperStrategy {
+        <<interface>>
+        +ExecuteAsync()
+    }
+
+    class NewsArticleStrategy {
+        +ExecuteAsync()
+    }
+
+    class JobPostingStrategy {
+        +ExecuteAsync()
+    }
+
+    ScraperProcessor --> IScraperStrategyContext
+
+    ScraperStrategyContext ..|> IScraperStrategyContext
+    ScraperStrategyContext --> IScraperStrategy
+
+    NewsArticleStrategy ..|> IScraperStrategy
+    JobPostingStrategy ..|> IScraperStrategy
+
+
+    %% =========================
+    %% Result
+    %% =========================
+
+    class IResult {
+        <<interface>>
+        +Type ItemType
+        +IEnumerable~object~ Items
+    }
+
+    class ScraperResult~T~ {
+        +Type ItemType
+        +IEnumerable~object~ Items
+    }
+
+    ScraperResult ..|> IResult
+
+    class NewsArticle {
+        +string Title
+        +string Url
+        +string Content
+    }
+
+    class JobPosting {
+        +string Title
+        +string Company
+        +string Location
+        +string Url
+    }
+
+    ScraperResult~T~ --> NewsArticle
+    ScraperResult~T~ --> JobPosting
+
+    IScraperProcessor --> IResult
+
+
+    %% =========================
+    %% Export
+    %% =========================
+
+    class IResultExportService {
+        <<interface>>
+        +ExportAsync(IResult result, ExportFormat format)
+    }
+
+    class ResultExportService {
+        +ExportAsync(IResult result, ExportFormat format)
+    }
+
+    class IResultExporter {
+        <<interface>>
+        +CanHandle(ExportFormat format)
+        +ExportAsync(IResult result)
+    }
+
+    class JsonResultExporter {
+        +CanHandle()
+        +ExportAsync()
+    }
+
+    class CsvResultExporter {
+        +CanHandle()
+        +ExportAsync()
+    }
+
+    class ExcelResultExporter {
+        +CanHandle()
+        +ExportAsync()
+    }
+
+    class ResultExport {
+        +Stream Content
+        +string FileName
+        +string ContentType
+        +string Extension
+    }
+
+    class ExportFormat {
+        <<enumeration>>
+        Json
+        Csv
+        Excel
+    }
+
+    ProcessorOrchestrator --> IResultExportService
+
+    ResultExportService ..|> IResultExportService
+    ResultExportService --> IResultExporter
+
+    JsonResultExporter ..|> IResultExporter
+    CsvResultExporter ..|> IResultExporter
+    ExcelResultExporter ..|> IResultExporter
+
+    IResultExporter --> ResultExport
+    IResultExportService --> ExportFormat
+
+
+    %% =========================
+    %% Artifacts
+    %% =========================
+
+    class IArtifactService {
+        <<interface>>
+        +CreateAsync(int executionId, ResultExport export)
+    }
+
+    class ArtifactService {
+        +CreateAsync(int executionId, ResultExport export)
+    }
+
+    class IArtifactStorage {
+        <<interface>>
+        +UploadAsync(Stream content)
+        +DeleteAsync(string key)
+    }
+
+    class ArtifactStorageResult {
+        +string StorageKey
+        +long Size
+        +string ContentType
+    }
+
+    class IArtifactRepository {
+        <<interface>>
+        +AddAsync(Artifact artifact)
+        +GetByExecutionAsync(int executionId)
+    }
+
+    class ArtifactRepository {
+        +AddAsync(Artifact artifact)
+        +GetByExecutionAsync(int executionId)
+    }
+
+    class MinioArtifactStorage {
+        +UploadAsync(Stream content)
+        +DeleteAsync(string key)
+    }
+
+    ProcessorOrchestrator --> IArtifactService
+
+    ArtifactService ..|> IArtifactService
+    ArtifactService --> IArtifactStorage
+    ArtifactService --> IArtifactRepository
+    ArtifactService --> Artifact
+
+    MinioArtifactStorage ..|> IArtifactStorage
+    IArtifactStorage --> ArtifactStorageResult
+
+    ArtifactRepository ..|> IArtifactRepository
+    IArtifactRepository --> Artifact

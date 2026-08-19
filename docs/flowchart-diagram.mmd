@@ -1,0 +1,41 @@
+flowchart TD
+    A[Client] -->|POST JobExecution| B[CreateJobExecutionUseCase]
+
+    B --> C[JobExecutionFactory]
+    C --> D[JobExecution]
+
+    D --> E[JobExecutionRepository]
+    D --> F[JobExecutionQueue]
+
+    F --> G[JobWorker]
+
+    G --> H[ProcessorOrchestrator]
+
+    H --> I[ScraperProcessor]
+
+    I --> J[ScraperContext]
+
+    J --> K{JobType}
+
+    K -->|NewsArticles| L[News Scraper Strategies]
+    K -->|JobPosting| M[Job Posting Strategies]
+
+    L --> N[JobExecutionResult]
+    M --> N
+
+    N --> O[ExportService]
+
+    O --> P[IResultExporter]
+    P --> Q[ResultExport]
+
+    Q --> R[ArtifactsService]
+
+    R --> S[IArtifactStorage]
+    S --> T[(MinIO / S3)]
+
+    R --> U[IArtifactRepository]
+    U --> V[(PostgreSQL)]
+
+    R --> W[Artifact]
+
+    H --> X[Complete JobExecution]
