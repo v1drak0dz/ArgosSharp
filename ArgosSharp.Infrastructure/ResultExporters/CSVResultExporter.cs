@@ -11,19 +11,23 @@ namespace ArgosSharp.Infrastructure.ResultExporters
     {
         public bool CanHandle(ExportFormat format) => format == ExportFormat.CSV;
 
-        public async Task<ResultExport> ExportAsync(JobExecutionResult result)
+        public Task<ResultExport> Export(JobExecutionResult result)
         {
             using var writer = new StringWriter();
-
             using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
             csv.WriteRecords(result.Data);
 
             var bytes = Encoding.UTF8.GetBytes(writer.ToString());
-
             var stream = new MemoryStream(bytes);
 
-            return new ResultExport { Content = stream, FileName = "export.csv", ContentType = "csv", Extension = ".csv" };
+            return Task.FromResult(new ResultExport
+            { 
+                Content = stream,
+                FileName = "export.csv",
+                ContentType = "csv",
+                Extension = ".csv"
+            });
         }
     }
 }

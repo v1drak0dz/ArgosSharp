@@ -9,7 +9,7 @@ namespace ArgosSharp.Application.Services.ExporterService
         public Task<ResultExport> ExportAsync(JobExecutionResult result, ExportFormat format) =>
             exporters
                 .FirstOrDefault(e => e.CanHandle(format))?
-                .ExportAsync(result) 
+                .Export(result) 
             ?? throw new NotSupportedException($"Export format {format} is not supported.");
     }
 }

@@ -5,6 +5,7 @@ using ArgosSharp.Application.UseCase.Scraper;
 using ArgosSharp.Domain.Entity;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
+using System;
 
 namespace ArgosSharp.Application.Services.JobProcessor
 {
@@ -21,38 +22,33 @@ namespace ArgosSharp.Application.Services.JobProcessor
         {
             await jobExecutionRepository.ProcessingAsync(jobExecution);
             // update start datetime on jobexecution object
+            jobExecution.StartedAt = DateTime.UtcNow; // Temporary implementation
+            await jobExecutionRepository.UpdateAsync(jobExecution);
 
-            // Call Scraper Strategy based on source
-            var job = await jobRepository.GetAsync(jobExecution.JobId) ?? throw new InvalidOperationException();
-
-            JobExecutionResult? result = null;
-            switch (job.JobType)
-            {
-                case JobType.NewsArticles:
-                    result = new JobExecutionResult
-                    {
-                        JobType = typeof(NewsArticle),
-                        Data = await scraperStrategyContext.GetNewsBySourceAsync(jobExecution.Parameters)
-                    };
-                    break;
-
-                case JobType.JobPosting:
-                    result = new JobExecutionResult
-                    {
-                        JobType = typeof(JobPosting),
-                        Data = await scraperStrategyContext.GetJobsBySourceAsync(jobExecution.Parameters)
-                    };
-                    break;
-            }
-
-            if (result == null)
-                throw new InvalidOperationException("Job execution result is null.");
-
-            var export = await resultExportService.ExportAsync(result, ExportFormat.JSON);
+            var job = await jobRepository.GetAsync(jobExecution.JobId) ?? throw new InvalidOperationException("Job is null");
+            var result = await GetJobExecutionResult(job.JobType, jobExecution.Parameters) ?? throw new InvalidOperationException("Job execution result is null");
+            var export = await resultExportService.ExportAsync(result, ExportFormat.CSV);
 
             await artifactsService.CreateAsync(jobExecution.Id, export.Content, export.FileName, export.ContentType, CancellationToken.None);
-
             await jobExecutionRepository.CompleteAsync(jobExecution);
+        }
+
+        private async Task<JobExecutionResult?> GetJobExecutionResult(JobType jobType, JobParameters jobParameters)
+        {
+            return jobType switch
+            {
+                JobType.NewsArticles => new JobExecutionResult
+                {
+                    JobType = typeof(NewsArticle),
+                    Data = await scraperStrategyContext.GetNewsBySourceAsync(jobParameters)
+                },
+                JobType.JobPosting => new JobExecutionResult
+                {
+                    JobType = typeof(JobPosting),
+                    Data = await scraperStrategyContext.GetJobsBySourceAsync(jobParameters)
+                },
+                _ => null,
+            };
         }
     }
 }

@@ -7,6 +7,6 @@ namespace ArgosSharp.Application.Interfaces.ResultExporters
     {
         bool CanHandle(ExportFormat format);
 
-        Task<ResultExport> ExportAsync(JobExecutionResult result);
+        Task<ResultExport> Export(JobExecutionResult result);
     }
 }
