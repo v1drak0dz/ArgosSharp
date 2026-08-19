@@ -1,4 +1,6 @@
-﻿using ArgosSharp.Application.Services.JobProcessor;
+﻿using ArgosSharp.Application.Services.ArtifactsService;
+using ArgosSharp.Application.Services.ExporterService;
+using ArgosSharp.Application.Services.JobProcessor;
 using ArgosSharp.Application.Services.JobQueue;
 using ArgosSharp.Application.Services.JobWorker;
 using ArgosSharp.Application.UseCase.Jobs.CreateJob;
@@ -17,13 +19,13 @@ namespace ArgosSharp.Application
 
             service.AddScoped<IScraperContext, ScraperContext>();
             service.AddScoped<IJobProcessorService, JobProcessorService>();
+            service.AddScoped<IArtifactsService, ArtifactsService>();
+            service.AddScoped<IExportService, ExportService>();
 
             service.AddScoped<ICreateJobUseCase, CreateJobUseCase>();
             service.AddScoped<IGetJobUseCase, GetJobUseCase>();
 
             service.AddScoped<ICreateJobExecutionUseCase, CreateJobExecutionUseCase>();
-
-            service.AddScoped<IScraperContext, ScraperContext>();
 
             service.AddHostedService<JobWorker>();
             service.AddHostedService<JobWorker>();

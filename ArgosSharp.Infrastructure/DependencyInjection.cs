@@ -1,6 +1,7 @@
 ﻿using ArgosSharp.Application.Interfaces.Fetcher;
 using ArgosSharp.Application.Interfaces.Parser;
 using ArgosSharp.Application.Interfaces.Repositories;
+using ArgosSharp.Application.Interfaces.ResultExporters;
 using ArgosSharp.Application.Interfaces.Scrapers;
 using ArgosSharp.Application.Interfaces.Storage;
 using ArgosSharp.Infrastructure.Http.Fetcher;
@@ -8,6 +9,7 @@ using ArgosSharp.Infrastructure.Http.Parser;
 using ArgosSharp.Infrastructure.Persistence;
 using ArgosSharp.Infrastructure.Persistence.Configurations;
 using ArgosSharp.Infrastructure.Repositories;
+using ArgosSharp.Infrastructure.ResultExporters;
 using ArgosSharp.Infrastructure.Scrapers.JobPostings;
 using ArgosSharp.Infrastructure.Scrapers.NewsArticles;
 using ArgosSharp.Infrastructure.Storage;
@@ -46,6 +48,8 @@ namespace ArgosSharp.Infrastructure
             services.AddScoped<INewsArticlesScrapers, UbatubaScraper>();
 
             services.AddScoped<IJobPostingsScrapers, IndeedScraper>();
+
+            services.AddScoped<IResultExporter, CSVResultExporter>();
 
             return services;
         }
