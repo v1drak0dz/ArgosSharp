@@ -28,18 +28,21 @@ namespace ArgosSharp.Infrastructure.Repositories
 
         public async Task CompleteAsync(JobExecution job)
         {
+            job.FinishedAt = DateTime.Now;
             job.JobStatus = JobStatusEnum.Completed;
             await UpdateAsync(job);
         }
 
         public async Task FailAsync(JobExecution job)
         {
+            job.FinishedAt = DateTime.Now;
             job.JobStatus = JobStatusEnum.Failed;
             await UpdateAsync(job);
         }
 
         public async Task ProcessingAsync(JobExecution job)
         {
+            job.StartedAt = DateTime.Now;
             job.JobStatus = JobStatusEnum.Processing;
             await UpdateAsync(job);
         }

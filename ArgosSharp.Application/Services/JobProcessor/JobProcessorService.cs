@@ -5,7 +5,6 @@ using ArgosSharp.Application.UseCase.Scraper;
 using ArgosSharp.Domain.Entity;
 using ArgosSharp.Domain.Enums;
 using ArgosSharp.Domain.ValueObjects;
-using System;
 
 namespace ArgosSharp.Application.Services.JobProcessor
 {
@@ -21,8 +20,6 @@ namespace ArgosSharp.Application.Services.JobProcessor
         public async Task ProcessJobAsync(JobExecution jobExecution)
         {
             await jobExecutionRepository.ProcessingAsync(jobExecution);
-            // update start datetime on jobexecution object
-            jobExecution.StartedAt = DateTime.UtcNow; // Temporary implementation
             await jobExecutionRepository.UpdateAsync(jobExecution);
 
             var job = await jobRepository.GetAsync(jobExecution.JobId) ?? throw new InvalidOperationException("Job is null");
