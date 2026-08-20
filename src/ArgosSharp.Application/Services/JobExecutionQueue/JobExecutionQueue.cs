@@ -1,8 +1,9 @@
 ﻿using ArgosSharp.Domain.Entity;
 using System.Threading.Channels;
 
-namespace ArgosSharp.Application.Services.JobQueue
+namespace ArgosSharp.Application.Services.JobExecutionQueue
 {
+    [Obsolete("Use SQSQueue instead.")]
     public class JobExecutionQueue : IJobExecutionQueue
     {
         private readonly Channel<JobExecution> queue = Channel.CreateUnbounded<JobExecution>();

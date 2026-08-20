@@ -1,7 +1,8 @@
 ﻿using ArgosSharp.Domain.Entity;
 
-namespace ArgosSharp.Application.Services.JobQueue
+namespace ArgosSharp.Application.Services.JobExecutionQueue
 {
+    [Obsolete("Use SQSQueue instead.")]
     public interface IJobExecutionQueue
     {
         /// <summary>

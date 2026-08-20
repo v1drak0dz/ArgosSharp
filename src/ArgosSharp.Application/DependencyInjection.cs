@@ -1,7 +1,7 @@
 ﻿using ArgosSharp.Application.Services.ArtifactsService;
 using ArgosSharp.Application.Services.ExporterService;
+using ArgosSharp.Application.Services.JobExecutionQueue;
 using ArgosSharp.Application.Services.JobProcessor;
-using ArgosSharp.Application.Services.JobQueue;
 using ArgosSharp.Application.Services.JobWorker;
 using ArgosSharp.Application.UseCase.Jobs.CreateJob;
 using ArgosSharp.Application.UseCase.Jobs.GetJob;

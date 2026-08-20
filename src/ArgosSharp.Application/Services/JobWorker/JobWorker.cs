@@ -1,5 +1,5 @@
-﻿using ArgosSharp.Application.Services.JobProcessor;
-using ArgosSharp.Application.Services.JobQueue;
+﻿using ArgosSharp.Application.Services.JobExecutionQueue;
+using ArgosSharp.Application.Services.JobProcessor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

@@ -366,8 +366,13 @@ TestResult
 coverage
 /api
 /_site
-/ArgosSharp.Api/.env
+**/*/.env
 *.db
 *.db-shm
 *.db-wal
 *.zip
+diff.txt
+Migrations/*
+**/*/.terraform/*
+**/*/.terraform.lock.hcl
+dump.txt

@@ -1,6 +1,6 @@
 ﻿using ArgosSharp.Application.Contracts.JobExecutions;
 using ArgosSharp.Application.Interfaces.Repositories;
-using ArgosSharp.Application.Services.JobQueue;
+using ArgosSharp.Application.Services.JobExecutionQueue;
 using ArgosSharp.Domain.Entity;
 using ArgosSharp.Domain.Factories.JobExecutionFactory.cs;
 using ArgosSharp.Domain.ValueObjects;
